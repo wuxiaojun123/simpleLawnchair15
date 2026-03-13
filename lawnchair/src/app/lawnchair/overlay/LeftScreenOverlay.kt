@@ -127,7 +127,11 @@ class LeftScreenOverlay(private val launcher: LawnchairLauncher) :
     }
 
     private fun attachLeftScreenView() {
-        if (isAttached) return
+        if (isAttached) {
+            attachFragment()
+            launcher.setLauncherOverlay(this)
+            return
+        }
 
         // Create view if not exists
         if (leftScreenContainer == null) {
@@ -147,6 +151,10 @@ class LeftScreenOverlay(private val launcher: LawnchairLauncher) :
         }
     }
 
+    fun ensureContentAttached() {
+        attachLeftScreenView()
+    }
+
     private fun detachLeftScreenView() {
         if (!isAttached) return
 
@@ -160,7 +168,11 @@ class LeftScreenOverlay(private val launcher: LawnchairLauncher) :
     private fun attachFragment() {
         val fragmentManager = launcher.fragmentManager
         val existing = fragmentManager.findFragmentByTag(FRAGMENT_TAG) as? LeftScreenFragment
-        if (existing?.isAdded == true && existing.id == R.id.left_screen_fragment_container) {
+        val isFragmentAttachedToCurrentContainer =
+            existing?.isAdded == true &&
+                existing.id == R.id.left_screen_fragment_container &&
+                existing.view?.parent === leftScreenContainer
+        if (isFragmentAttachedToCurrentContainer) {
             return
         }
         fragmentManager.beginTransaction()

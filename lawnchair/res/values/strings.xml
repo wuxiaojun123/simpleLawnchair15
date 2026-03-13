@@ -225,6 +225,17 @@
     <string name="left_screen_card_description">Workspace overscroll drives the overlay. The overlay hosts this view. This view only renders content and handles clicks.</string>
     <string name="left_screen_actions_title">Quick actions</string>
     <string name="left_screen_wallpaper_hint">Wallpaper entry can be wired here next.</string>
+    <string name="right_screen_title">Right Screen</string>
+    <string name="right_screen_subtitle">This is a simple fixed page appended to the workspace.</string>
+    <string name="right_screen_status">Right screen ready. Updated at %1$s.</string>
+    <string name="right_screen_center_text">RIGHT SCREEN</string>
+    <string name="right_screen_intro_text">This page is a real workspace screen hosting a fragment.</string>
+    <string name="right_screen_card_title">Why this screen is different</string>
+    <string name="right_screen_card_description">Unlike the left overlay, this page is inserted as the rightmost workspace page, so it behaves like a normal home screen page.</string>
+    <string name="right_screen_actions_title">Quick actions</string>
+    <string name="right_screen_toast_button">Show demo message</string>
+    <string name="right_screen_toast_message">Right screen fragment is active.</string>
+    <string name="user_present_toast">Launcher unlocked.</string>
 
     <!--
 

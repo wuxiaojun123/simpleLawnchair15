@@ -18,15 +18,24 @@ package app.lawnchair
 
 import android.animation.AnimatorSet
 import android.app.ActivityOptions
+import android.app.Fragment
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.graphics.Color
 import android.graphics.RectF
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.util.Log
 import android.util.Pair
 import android.view.Display
+import android.view.MotionEvent
+import android.view.ViewConfiguration
 import android.view.View
+import android.view.ViewGroup
+import android.widget.FrameLayout
+import android.widget.Toast
 import android.view.ViewTreeObserver
 import android.window.SplashScreen
 import androidx.activity.SystemBarStyle
@@ -57,13 +66,16 @@ import app.lawnchair.views.LawnchairFloatingSurfaceView
 import com.android.launcher3.AbstractFloatingView
 import com.android.launcher3.BaseActivity
 import com.android.launcher3.BubbleTextView
+import com.android.launcher3.CellLayout
 import com.android.launcher3.GestureNavContract
 import com.android.launcher3.LauncherAppState
 import com.android.launcher3.LauncherState
 import com.android.launcher3.R
 import com.android.launcher3.Utilities
+import com.android.launcher3.celllayout.CellLayoutLayoutParams
 import com.android.launcher3.model.data.ItemInfo
 import com.android.launcher3.popup.SystemShortcut
+import com.android.launcher3.rightscreen.RightScreenFragment
 import com.android.launcher3.shortcuts.DeepShortcutView
 import com.android.launcher3.statemanager.StateManager
 import com.android.launcher3.statemanager.StateManager.StateHandler
@@ -150,6 +162,18 @@ class LawnchairLauncher : QuickstepLauncher() {
 
     private lateinit var colorScheme: ColorScheme
     private var hasBackGesture = false
+    private var isUserPresentReceiverRegistered = false
+    private val userPresentReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            if (intent?.action == Intent.ACTION_USER_PRESENT) {
+                Toast.makeText(
+                    this@LawnchairLauncher,
+                    R.string.user_present_toast,
+                    Toast.LENGTH_SHORT,
+                ).show()
+            }
+        }
+    }
 
     val gestureController by unsafeLazy { GestureController(this) }
 
@@ -449,6 +473,11 @@ class LawnchairLauncher : QuickstepLauncher() {
     override fun onResume() {
         super.onResume()
         restartIfPending()
+        dragLayer.post {
+            defaultOverlay.ensureContentAttached()
+            ensureRightScreen()
+            updateRightScreenUi()
+        }
 
         dragLayer.viewTreeObserver.addOnDrawListener(
             object : ViewTreeObserver.OnDrawListener {
@@ -469,13 +498,282 @@ class LawnchairLauncher : QuickstepLauncher() {
         )
     }
 
+    override fun onStart() {
+        super.onStart()
+        if (!isUserPresentReceiverRegistered) {
+            registerReceiver(userPresentReceiver, IntentFilter(Intent.ACTION_USER_PRESENT))
+            isUserPresentReceiverRegistered = true
+        }
+    }
+
+    override fun onStop() {
+        if (isUserPresentReceiverRegistered) {
+            unregisterReceiver(userPresentReceiver)
+            isUserPresentReceiverRegistered = false
+        }
+        super.onStop()
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         // Only actually closes if required, safe to call if not enabled
         SmartspacerClient.close()
     }
 
+    override fun finishBindingItems(pagesBoundFirst: com.android.launcher3.util.IntSet?) {
+        super.finishBindingItems(pagesBoundFirst)
+        Log.d(
+            TAG,
+            "finishBindingItems pagesBoundFirst=$pagesBoundFirst screenOrderBefore=${workspace.screenOrder.toConcatString()} childCount=${workspace.childCount}",
+        )
+        ensureRightScreen()
+        updateRightScreenUi()
+    }
+
     override fun getDefaultOverlay(): LauncherOverlayManager = defaultOverlay
+
+    private fun ensureRightScreen() {
+        Log.d(
+            TAG,
+            "ensureRightScreen before insert screenOrder=${workspace.screenOrder.toConcatString()} childCount=${workspace.childCount}",
+        )
+        workspace.insertNewWorkspaceScreenBeforeEmptyScreen(RIGHT_SCREEN_ID)
+        Log.d(
+            TAG,
+            "ensureRightScreen after insert screenOrder=${workspace.screenOrder.toConcatString()} childCount=${workspace.childCount} pageIndex=${workspace.getPageIndexForScreenId(RIGHT_SCREEN_ID)}",
+        )
+        val screen = workspace.getScreenWithId(RIGHT_SCREEN_ID) ?: return
+        Log.d(
+            TAG,
+            "ensureRightScreen screenFound id=${workspace.getCellLayoutId(screen)} rootChildren=${screen.childCount} swChildCount=${screen.shortcutsAndWidgets.childCount}",
+        )
+        ensureRightScreenHost(screen)
+        ensureRightScreenOverlayContainer()
+        attachRightScreenFragment()
+    }
+
+    private fun ensureRightScreenHost(screen: CellLayout) {
+        screen.setPadding(0, 0, 0, 0)
+
+        if (screen.findViewById<View>(R.id.right_screen_keepalive) != null) {
+            Log.d(
+                TAG,
+                "ensureRightScreenHost keepAliveExists pageIndex=${workspace.getPageIndexForScreenId(RIGHT_SCREEN_ID)} rootChildren=${screen.childCount}",
+            )
+            return
+        }
+
+        val keepAlive = View(this).apply {
+            id = R.id.right_screen_keepalive
+            alpha = 0f
+            isClickable = false
+            isFocusable = false
+            importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO
+        }
+        screen.addViewToCellLayout(
+            keepAlive,
+            -1,
+            R.id.right_screen_keepalive,
+            CellLayoutLayoutParams(0, 0, 1, 1),
+            false,
+        )
+        Log.d(
+            TAG,
+            "ensureRightScreenHost keepAliveAdded rootChildren=${screen.childCount} swChildCount=${screen.shortcutsAndWidgets.childCount}",
+        )
+    }
+
+    private fun ensureRightScreenOverlayContainer() {
+        val dragLayer = findViewById<ViewGroup>(R.id.drag_layer) as? FrameLayout ?: return
+        if (dragLayer.findViewById<View>(R.id.right_screen_overlay_container) != null) {
+            return
+        }
+
+        val container = object : FrameLayout(this) {
+            private var sendTouchToWorkspace = false
+            private val touchSlop = ViewConfiguration.get(context).scaledTouchSlop
+            private var downX = 0f
+            private var downY = 0f
+
+            override fun onInterceptTouchEvent(ev: MotionEvent): Boolean {
+                if (visibility != View.VISIBLE) {
+                    sendTouchToWorkspace = false
+                    return false
+                }
+                when (ev.actionMasked) {
+                    MotionEvent.ACTION_DOWN -> {
+                        parent?.requestDisallowInterceptTouchEvent(true)
+                        downX = ev.x
+                        downY = ev.y
+                        sendTouchToWorkspace = false
+                        workspace.onInterceptTouchEvent(ev)
+                        Log.d(
+                            TAG,
+                            "rightScreenTouch intercept DOWN x=${ev.x} y=${ev.y} visible=$visibility clickable=$isClickable enabled=$isEnabled",
+                        )
+                    }
+
+                    MotionEvent.ACTION_MOVE -> {
+                        val dx = ev.x - downX
+                        val dy = ev.y - downY
+                        if (kotlin.math.abs(dx) > touchSlop && kotlin.math.abs(dx) > kotlin.math.abs(dy)) {
+                            sendTouchToWorkspace = workspace.onInterceptTouchEvent(ev)
+                            Log.d(
+                                TAG,
+                                "rightScreenTouch intercept MOVE dx=$dx dy=$dy sendTouchToWorkspace=$sendTouchToWorkspace",
+                            )
+                            return sendTouchToWorkspace || true
+                        }
+                    }
+
+                    MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                        Log.d(
+                            TAG,
+                            "rightScreenTouch intercept END action=${ev.actionMasked} sendTouchToWorkspace=$sendTouchToWorkspace",
+                        )
+                        sendTouchToWorkspace = false
+                        parent?.requestDisallowInterceptTouchEvent(false)
+                    }
+                }
+                return false
+            }
+
+            override fun onTouchEvent(event: MotionEvent): Boolean {
+                if (event.actionMasked == MotionEvent.ACTION_DOWN) {
+                    parent?.requestDisallowInterceptTouchEvent(true)
+                    Log.d(
+                        TAG,
+                        "rightScreenTouch touch DOWN x=${event.x} y=${event.y} sendTouchToWorkspace=$sendTouchToWorkspace visible=$visibility clickable=$isClickable enabled=$isEnabled",
+                    )
+                }
+                if (sendTouchToWorkspace) {
+                    val handled = workspace.onTouchEvent(event)
+                    Log.d(
+                        TAG,
+                        "rightScreenTouch touch FORWARD action=${event.actionMasked} handled=$handled",
+                    )
+                    when (event.actionMasked) {
+                        MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                            sendTouchToWorkspace = false
+                            parent?.requestDisallowInterceptTouchEvent(false)
+                        }
+                    }
+                    return handled
+                }
+                if (event.actionMasked == MotionEvent.ACTION_UP || event.actionMasked == MotionEvent.ACTION_CANCEL) {
+                    Log.d(
+                        TAG,
+                        "rightScreenTouch touch END action=${event.actionMasked} sendTouchToWorkspace=$sendTouchToWorkspace",
+                    )
+                    parent?.requestDisallowInterceptTouchEvent(false)
+                }
+                return super.onTouchEvent(event) || true
+            }
+        }.apply {
+            id = R.id.right_screen_overlay_container
+            setBackgroundColor(Color.parseColor("#FFF4E5"))
+            visibility = View.GONE
+            isClickable = true
+            isFocusable = true
+        }
+        dragLayer.addView(
+            container,
+            2,
+            FrameLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT,
+            ),
+        )
+        Log.d(TAG, "ensureRightScreenOverlayContainer added rootChildren=${dragLayer.childCount}")
+    }
+
+    private fun attachRightScreenFragment() {
+        val existing = fragmentManager.findFragmentByTag(RIGHT_SCREEN_FRAGMENT_TAG)
+        val fragment: Fragment = existing ?: RightScreenFragment()
+        val overlayContainer = findViewById<View>(R.id.right_screen_overlay_container)
+        val isFragmentAttachedToCurrentContainer =
+            existing?.isAdded == true &&
+                existing.id == R.id.right_screen_overlay_container &&
+                existing.view?.parent === overlayContainer
+        Log.d(
+            TAG,
+            "attachRightScreenFragment existing=${existing != null} attachedToCurrent=$isFragmentAttachedToCurrentContainer fragment=${fragment.javaClass.simpleName} containerExists=${overlayContainer != null}",
+        )
+        if (isFragmentAttachedToCurrentContainer) {
+            return
+        }
+        fragmentManager.beginTransaction()
+            .replace(R.id.right_screen_overlay_container, fragment, RIGHT_SCREEN_FRAGMENT_TAG)
+            .commitAllowingStateLoss()
+        fragmentManager.executePendingTransactions()
+        val attached = fragmentManager.findFragmentByTag(RIGHT_SCREEN_FRAGMENT_TAG)
+        Log.d(
+            TAG,
+            "attachRightScreenFragment committed attached=${attached != null} pageIndex=${workspace.getPageIndexForScreenId(RIGHT_SCREEN_ID)} screenOrder=${workspace.screenOrder.toConcatString()}",
+        )
+    }
+
+    private fun updateRightScreenUi(
+        currentPage: Int = workspace.currentPage,
+        destinationPage: Int = workspace.destinationPage,
+    ) {
+        val overlayContainer = findViewById<View>(R.id.right_screen_overlay_container) ?: return
+        val rightPageIndex = workspace.getPageIndexForScreenId(RIGHT_SCREEN_ID)
+        val currentScreenId = workspace.getScreenIdForPageIndex(currentPage)
+        val destinationScreenId = workspace.getScreenIdForPageIndex(destinationPage)
+        val progress = getRightScreenProgress(rightPageIndex)
+        val isSettlingToRightScreen = destinationScreenId == RIGHT_SCREEN_ID
+        val isFullyOnRightScreen = currentScreenId == RIGHT_SCREEN_ID && progress >= 0.99f
+        val isVisible =
+            progress > RIGHT_SCREEN_VISIBLE_THRESHOLD ||
+                isSettlingToRightScreen ||
+                isFullyOnRightScreen
+        val translationDistance = overlayContainer.width.takeIf { it > 0 } ?: resources.displayMetrics.widthPixels
+        overlayContainer.visibility = if (isVisible) View.VISIBLE else View.GONE
+        overlayContainer.alpha = progress
+        overlayContainer.translationX = (1f - progress) * translationDistance * 0.18f
+        overlayContainer.isClickable = progress > RIGHT_SCREEN_INTERACTIVE_THRESHOLD
+        overlayContainer.isFocusable = progress > RIGHT_SCREEN_INTERACTIVE_THRESHOLD
+        overlayContainer.isEnabled = progress > RIGHT_SCREEN_INTERACTIVE_THRESHOLD
+
+        val hotseatAlpha = 1f - progress
+        hotseat.visibility = if (progress >= 0.99f) View.INVISIBLE else View.VISIBLE
+        hotseat.alpha = hotseatAlpha
+        hotseat.setIconsAlpha(hotseatAlpha)
+        hotseat.setQsbAlpha(hotseatAlpha)
+        workspace.pageIndicator?.alpha = hotseatAlpha
+        workspace.pageIndicator?.visibility = if (progress >= 0.99f) View.INVISIBLE else View.VISIBLE
+        Log.d(
+            TAG,
+            "updateRightScreenUi visible=$isVisible progress=$progress currentPage=$currentPage destinationPage=$destinationPage currentScreenId=$currentScreenId destinationScreenId=$destinationScreenId settlingToRight=$isSettlingToRightScreen fullyOnRight=$isFullyOnRightScreen overlayVisibility=${overlayContainer.visibility} clickable=${overlayContainer.isClickable} enabled=${overlayContainer.isEnabled} hotseatVisible=${hotseat.visibility == View.VISIBLE}",
+        )
+    }
+
+    private fun getRightScreenProgress(rightPageIndex: Int): Float {
+        if (rightPageIndex <= 0) return 0f
+        val previousPageIndex = rightPageIndex - 1
+        val startScroll = workspace.getScrollForPage(previousPageIndex)
+        val endScroll = workspace.getScrollForPage(rightPageIndex)
+        if (endScroll <= startScroll) {
+            return if (workspace.currentPage >= rightPageIndex) 1f else 0f
+        }
+        return ((workspace.scrollX - startScroll).toFloat() / (endScroll - startScroll).toFloat())
+            .coerceIn(0f, 1f)
+    }
+
+    override fun onPageEndTransition() {
+        super.onPageEndTransition()
+        updateRightScreenUi()
+    }
+
+    override fun onWorkspaceScrollChanged(currentPage: Int, destinationPage: Int) {
+        super.onWorkspaceScrollChanged(currentPage, destinationPage)
+        updateRightScreenUi(currentPage, destinationPage)
+    }
+
+    fun isRightScreenVisible(): Boolean {
+        return findViewById<View>(R.id.right_screen_overlay_container)?.visibility == View.VISIBLE
+    }
 
     fun recreateIfNotScheduled() {
         if (sRestartFlags == 0) {
@@ -506,8 +804,13 @@ class LawnchairLauncher : QuickstepLauncher() {
     }
 
     companion object {
+        private const val TAG = "RightScreenDebug"
+        private const val RIGHT_SCREEN_VISIBLE_THRESHOLD = 0.02f
+        private const val RIGHT_SCREEN_INTERACTIVE_THRESHOLD = 0.08f
         private const val FLAG_RECREATE = 1 shl 0
         private const val FLAG_RESTART = 1 shl 1
+        private const val RIGHT_SCREEN_ID = 1_000_001
+        private const val RIGHT_SCREEN_FRAGMENT_TAG = "right_screen_fragment"
 
         var sRestartFlags = 0
 

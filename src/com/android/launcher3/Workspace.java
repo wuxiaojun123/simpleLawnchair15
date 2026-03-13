@@ -182,6 +182,7 @@ public class Workspace<T extends View & PageIndicator> extends PagedView<T>
     private static final boolean ENFORCE_DRAG_EVENT_ORDER = false;
 
     private static final int ADJACENT_SCREEN_DROP_DURATION = 300;
+    private static final String RIGHT_SCREEN_DEBUG_TAG = "RightScreenDebug";
 
     public static final int DEFAULT_PAGE = 0;
 
@@ -897,6 +898,13 @@ public class Workspace<T extends View & PageIndicator> extends PagedView<T>
         // depends on the panel count.
         for (int pageIndex = pageCount - panelCount; pageIndex < pageCount; pageIndex++) {
             int screenId = mScreenOrder.get(pageIndex);
+            if (screenId == RIGHT_SCREEN_ID) {
+                Log.d(RIGHT_SCREEN_DEBUG_TAG,
+                        "convertFinalScreenToEmptyScreenIfNecessary skipRightScreen "
+                                + "screenOrder=" + mScreenOrder.toConcatString()
+                                + " childCount=" + getChildCount());
+                return;
+            }
             CellLayout screen = mWorkspaceScreens.get(screenId);
             if (screen == null || screen.getShortcutsAndWidgets().getChildCount() != 0
                     || screen.isDropPending()) {
@@ -1153,6 +1161,13 @@ public class Workspace<T extends View & PageIndicator> extends PagedView<T>
         for (int i = 0; i < total; i++) {
             int id = mWorkspaceScreens.keyAt(i);
             CellLayout cl = mWorkspaceScreens.valueAt(i);
+            if (id == RIGHT_SCREEN_ID) {
+                Log.d(RIGHT_SCREEN_DEBUG_TAG,
+                        "stripEmptyScreens keepRightScreen rootChildren=" + cl.getChildCount()
+                                + " swChildCount=" + cl.getShortcutsAndWidgets().getChildCount()
+                                + " screenOrder=" + mScreenOrder.toConcatString());
+                continue;
+            }
             // FIRST_SCREEN_ID can never be removed.
             if ((!FeatureFlags.topQsbOnFirstScreenEnabled(mLauncher) || id > FIRST_SCREEN_ID)
                     && cl.getShortcutsAndWidgets().getChildCount() == 0) {
@@ -1214,6 +1229,11 @@ public class Workspace<T extends View & PageIndicator> extends PagedView<T>
         if (pageShift >= 0) {
             setCurrentPage(currentPage - pageShift);
         }
+
+        Log.d(RIGHT_SCREEN_DEBUG_TAG,
+                "stripEmptyScreens done removed=" + removeScreens.toConcatString()
+                        + " screenOrder=" + mScreenOrder.toConcatString()
+                        + " childCount=" + getChildCount());
     }
 
     /**
@@ -1487,6 +1507,7 @@ public class Workspace<T extends View & PageIndicator> extends PagedView<T>
         updatePageAlphaValues();
         updatePageScrollValues();
         enableHwLayersOnVisiblePages();
+        mLauncher.onWorkspaceScrollChanged(getCurrentPage(), getDestinationPage());
     }
 
     public void showPageIndicatorAtCurrentScroll() {

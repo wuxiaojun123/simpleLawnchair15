@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <item name="left_screen_fragment_container" type="id" />
+    <item name="right_screen_fragment_container" type="id" />
+    <item name="right_screen_keepalive" type="id" />
+    <item name="right_screen_overlay_container" type="id" />
 </resources>

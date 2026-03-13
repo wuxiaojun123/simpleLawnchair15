@@ -68,6 +68,9 @@ class VerticalSwipeTouchController(
         if ((ev.edgeFlags and Utilities.EDGE_NAV_BAR) != 0) {
             return false
         }
+        if (launcher.isRightScreenVisible()) {
+            return false
+        }
         return AbstractFloatingView.getTopOpenView(launcher) == null &&
             launcher.isInState(LauncherState.NORMAL)
     }

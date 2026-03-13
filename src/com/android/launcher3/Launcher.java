@@ -2655,6 +2655,13 @@ public class Launcher extends StatefulActivity<LauncherState>
     }
 
     /**
+     * Informs us that the workspace scroll position changed and provides both the settled page
+     * and the current destination page.
+     */
+    public void onWorkspaceScrollChanged(int currentPage, int destinationPage) {
+    }
+
+    /**
      * See {@code LauncherBindingDelegate}
      */
     @Override
