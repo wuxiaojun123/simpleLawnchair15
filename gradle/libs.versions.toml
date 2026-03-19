@@ -57,6 +57,8 @@ protobuf = "0.9.5"
 licensee = "1.14.1"
 refine = "4.4.0"
 spotless = "8.1.0"
+junitVersion = "4.13.2"
+appcompat = "1.6.1"
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -162,6 +164,8 @@ rikka-annotation-processor = { module = "dev.rikka.tools.refine:annotation-proce
 rikka-refine-runtime = { group = "dev.rikka.tools.refine", name = "runtime", version.ref = "refine" }
 smartspacer-sdk = { group = "com.kieronquinn.smartspacer", name = "sdk-client", version.ref = "smartspacer" }
 xdrop-fuzzywuzzy = { group = "me.xdrop", name = "fuzzywuzzy", version.ref = "fuzzywuzzy" }
+junit = { group = "junit", name = "junit", version.ref = "junitVersion" }
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 
 [bundles]
 accompanist = ["accompanist-adaptive", "accompanist-drawablepainter", "accompanist-permissions"]

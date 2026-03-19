@@ -1,0 +1,31 @@
+plugins {
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.kotlin.android)
+}
+
+android {
+    namespace "com.nice.library_news"
+    buildFeatures {
+        buildConfig true
+    }
+    defaultConfig {
+        buildConfigField "String", "THE_NEWS_API_TOKEN", "\"JfTWe7ngizsbgR5osce4F2QNagBnaM7wWCdiRGNw\""
+    }
+    sourceSets {
+        main {
+            java.srcDirs = ['src/main/java']
+        }
+    }
+}
+
+addFrameworkJar('framework-15.jar')
+compileOnlyCommonJars()
+
+dependencies {
+    implementation libs.androidx.core.ktx
+    implementation libs.androidx.recyclerview
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
+    implementation libs.google.material
+    implementation "com.github.bumptech.glide:glide:4.16.0"
+    implementation project(':lib:screenlib')
+}

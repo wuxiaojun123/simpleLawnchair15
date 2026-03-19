@@ -16,6 +16,8 @@
 
 package app.lawnchair.overlay
 
+import app.lawnchair.LeftScreenFragmentResolver
+import com.nice.screebkub.OverlayStateFileLogger
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.ValueAnimator
@@ -29,10 +31,10 @@ import android.view.ViewConfiguration
 import android.widget.FrameLayout
 import app.lawnchair.LawnchairLauncher
 import com.android.launcher3.R
-import com.android.launcher3.leftscreen.LeftScreenFragment
 import com.android.systemui.plugins.shared.LauncherOverlayManager
 import com.android.systemui.plugins.shared.LauncherOverlayManager.LauncherOverlay
 import com.android.systemui.plugins.shared.LauncherOverlayManager.LauncherOverlayCallbacks
+import com.nice.screebkub.LeftScreenFragment
 import kotlin.math.abs
 
 /**
@@ -43,6 +45,7 @@ class LeftScreenOverlay(private val launcher: LawnchairLauncher) :
     LauncherOverlay,
     LauncherOverlayManager {
     companion object {
+        private const val TAG = "LeftScreenOverlay"
         private const val FRAGMENT_TAG = "left_screen_fragment"
         private const val MIN_VISIBLE_PROGRESS = 0.01f
         private const val MIN_INTERACTIVE_PROGRESS = 0.18f
@@ -128,6 +131,7 @@ class LeftScreenOverlay(private val launcher: LawnchairLauncher) :
 
     private fun attachLeftScreenView() {
         if (isAttached) {
+            debugLog("attachLeftScreenView reuseAttached progress=$currentProgress")
             attachFragment()
             launcher.setLauncherOverlay(this)
             return
@@ -148,6 +152,7 @@ class LeftScreenOverlay(private val launcher: LawnchairLauncher) :
 
             // Notify launcher that overlay is attached
             launcher.setLauncherOverlay(this)
+            debugLog("attachLeftScreenView attached progress=$currentProgress childCount=${rootView.childCount}")
         }
     }
 
@@ -162,6 +167,7 @@ class LeftScreenOverlay(private val launcher: LawnchairLauncher) :
         if (rootView != null && leftScreenContainer != null) {
             rootView.removeView(leftScreenContainer)
             isAttached = false
+            debugLog("detachLeftScreenView childCount=${rootView.childCount}")
         }
     }
 
@@ -172,13 +178,31 @@ class LeftScreenOverlay(private val launcher: LawnchairLauncher) :
             existing?.isAdded == true &&
                 existing.id == R.id.left_screen_fragment_container &&
                 existing.view?.parent === leftScreenContainer
+        debugLog(
+            "attachFragment existing=${existing != null} attachedToCurrent=$isFragmentAttachedToCurrentContainer containerExists=${leftScreenContainer != null} containerChildCount=${leftScreenContainer?.childCount} fragmentView=${existing?.view != null}",
+        )
         if (isFragmentAttachedToCurrentContainer) {
             return
         }
-        fragmentManager.beginTransaction()
-            .replace(R.id.left_screen_fragment_container, existing ?: LeftScreenFragment(), FRAGMENT_TAG)
+        val transaction = fragmentManager.beginTransaction()
+        if (existing != null) {
+            debugLog(
+                "attachFragment removingStale existingId=${existing.id} existingViewParentMatches=${existing.view?.parent === leftScreenContainer}",
+            )
+            transaction.remove(existing)
+        }
+        transaction
+            .replace(
+                R.id.left_screen_fragment_container,
+                LeftScreenFragmentResolver.createFragment(launcher),
+                FRAGMENT_TAG,
+            )
             .commitAllowingStateLoss()
         fragmentManager.executePendingTransactions()
+        val attached = fragmentManager.findFragmentByTag(FRAGMENT_TAG)
+        debugLog(
+            "attachFragment committed attached=${attached != null} attachedToCurrent=${attached?.view?.parent === leftScreenContainer} containerChildCount=${leftScreenContainer?.childCount}",
+        )
     }
 
     override fun onScrollInteractionBegin() {
@@ -260,7 +284,11 @@ class LeftScreenOverlay(private val launcher: LawnchairLauncher) :
         attachLeftScreenView()
     }
 
-    override fun onActivityResumed(activity: Activity) {}
+    override fun onActivityResumed(activity: Activity) {
+        debugLog("onActivityResumed progress=$currentProgress attached=$isAttached")
+        verifyLeftScreenAttachment("onActivityResumed")
+    }
+
 
     override fun onActivityPaused(activity: Activity) {}
 
@@ -273,10 +301,13 @@ class LeftScreenOverlay(private val launcher: LawnchairLauncher) :
     }
 
     override fun onAttachedToWindow() {
+        debugLog("onAttachedToWindow")
         attachLeftScreenView()
+        verifyLeftScreenAttachment("onAttachedToWindow")
     }
 
     override fun onDetachedFromWindow() {
+        debugLog("onDetachedFromWindow")
         detachLeftScreenView()
     }
 
@@ -294,5 +325,24 @@ class LeftScreenOverlay(private val launcher: LawnchairLauncher) :
         } else {
             applyProgress(0f)
         }
+    }
+
+    private fun verifyLeftScreenAttachment(reason: String) {
+        val fragment = launcher.fragmentManager.findFragmentByTag(FRAGMENT_TAG) as? LeftScreenFragment
+        val attachedToCurrentContainer =
+            fragment?.isAdded == true &&
+                fragment.id == R.id.left_screen_fragment_container &&
+                fragment.view?.parent === leftScreenContainer
+        debugLog(
+            "verifyLeftScreenAttachment reason=$reason containerExists=${leftScreenContainer != null} containerChildCount=${leftScreenContainer?.childCount} fragmentExists=${fragment != null} fragmentAdded=${fragment?.isAdded} fragmentView=${fragment?.view != null} attachedToCurrent=$attachedToCurrentContainer stateSaved=${launcher.fragmentManager.isStateSaved}",
+        )
+        if (leftScreenContainer != null && !attachedToCurrentContainer && !launcher.fragmentManager.isStateSaved) {
+            debugLog("verifyLeftScreenAttachment reattaching fragment reason=$reason")
+            attachFragment()
+        }
+    }
+
+    private fun debugLog(message: String) {
+        OverlayStateFileLogger.log(launcher, TAG, message)
     }
 }

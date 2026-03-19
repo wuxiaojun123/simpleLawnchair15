@@ -35,6 +35,7 @@
         android:theme="@style/AppTheme"
         android:largeHeap="@bool/config_largeHeap"
         android:restoreAnyVersion="true"
+        android:usesCleartextTraffic="true"
         android:supportsRtl="true" >
 
         <!-- Activity for handling PinItemRequest is disabled on Android Go. -->

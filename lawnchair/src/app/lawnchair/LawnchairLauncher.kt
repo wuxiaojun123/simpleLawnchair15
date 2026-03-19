@@ -18,7 +18,6 @@ package app.lawnchair
 
 import android.animation.AnimatorSet
 import android.app.ActivityOptions
-import android.app.Fragment
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -27,7 +26,6 @@ import android.graphics.Color
 import android.graphics.RectF
 import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.util.Log
 import android.util.Pair
 import android.view.Display
 import android.view.MotionEvent
@@ -57,6 +55,9 @@ import app.lawnchair.preferences.PreferenceManager
 import app.lawnchair.preferences2.PreferenceManager2
 import app.lawnchair.root.RootHelperManager
 import app.lawnchair.root.RootNotAvailableException
+import com.nice.screebkub.LeftScreenHostActions
+import com.nice.screebkub.OverlayStateFileLogger
+import com.nice.screebkub.RightScreenFragment
 import app.lawnchair.theme.ThemeProvider
 import app.lawnchair.ui.popup.LauncherOptionsPopup
 import app.lawnchair.ui.popup.LawnchairShortcut
@@ -75,7 +76,6 @@ import com.android.launcher3.Utilities
 import com.android.launcher3.celllayout.CellLayoutLayoutParams
 import com.android.launcher3.model.data.ItemInfo
 import com.android.launcher3.popup.SystemShortcut
-import com.android.launcher3.rightscreen.RightScreenFragment
 import com.android.launcher3.shortcuts.DeepShortcutView
 import com.android.launcher3.statemanager.StateManager
 import com.android.launcher3.statemanager.StateManager.StateHandler
@@ -106,7 +106,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
-class LawnchairLauncher : QuickstepLauncher() {
+class LawnchairLauncher : QuickstepLauncher(), LeftScreenHostActions {
     private val defaultOverlay by unsafeLazy { LeftScreenOverlay(this) }
     private val googleFeedOverlay by unsafeLazy { OverlayCallbackImpl(this) }
     private val prefs by unsafeLazy { PreferenceManager.getInstance(this) }
@@ -166,6 +166,12 @@ class LawnchairLauncher : QuickstepLauncher() {
     private val userPresentReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             if (intent?.action == Intent.ACTION_USER_PRESENT) {
+                logOverlayState("userPresent:beforeEnsure")
+                defaultOverlay.ensureContentAttached()
+                ensureRightScreen()
+                updateRightScreenUi()
+                verifyRightScreenAttachment("userPresent")
+                logOverlayState("userPresent:afterEnsure")
                 Toast.makeText(
                     this@LawnchairLauncher,
                     R.string.user_present_toast,
@@ -304,6 +310,10 @@ class LawnchairLauncher : QuickstepLauncher() {
     override fun createTouchControllers(): Array<TouchController> {
         val verticalSwipeController = VerticalSwipeTouchController(this, gestureController)
         return arrayOf<TouchController>(verticalSwipeController) + super.createTouchControllers()
+    }
+
+    override fun openLeftScreenWidgets() {
+        OptionsPopupView.openWidgets(this)
     }
 
     override fun handleHomeTap() {
@@ -474,9 +484,14 @@ class LawnchairLauncher : QuickstepLauncher() {
         super.onResume()
         restartIfPending()
         dragLayer.post {
+            logOverlayState("onResume:beforeEnsure")
             defaultOverlay.ensureContentAttached()
-            ensureRightScreen()
-            updateRightScreenUi()
+            if (canRestoreRightScreen("onResume")) {
+                ensureRightScreen()
+                updateRightScreenUi()
+                verifyRightScreenAttachment("onResume")
+            }
+            logOverlayState("onResume:afterEnsure")
         }
 
         dragLayer.viewTreeObserver.addOnDrawListener(
@@ -522,10 +537,7 @@ class LawnchairLauncher : QuickstepLauncher() {
 
     override fun finishBindingItems(pagesBoundFirst: com.android.launcher3.util.IntSet?) {
         super.finishBindingItems(pagesBoundFirst)
-        Log.d(
-            TAG,
-            "finishBindingItems pagesBoundFirst=$pagesBoundFirst screenOrderBefore=${workspace.screenOrder.toConcatString()} childCount=${workspace.childCount}",
-        )
+        debugLog("finishBindingItems pagesBoundFirst=$pagesBoundFirst screenOrderBefore=${workspace.screenOrder.toConcatString()} childCount=${workspace.childCount}")
         ensureRightScreen()
         updateRightScreenUi()
     }
@@ -533,33 +545,29 @@ class LawnchairLauncher : QuickstepLauncher() {
     override fun getDefaultOverlay(): LauncherOverlayManager = defaultOverlay
 
     private fun ensureRightScreen() {
-        Log.d(
-            TAG,
-            "ensureRightScreen before insert screenOrder=${workspace.screenOrder.toConcatString()} childCount=${workspace.childCount}",
-        )
+        debugLog("ensureRightScreen before insert screenOrder=${workspace.screenOrder.toConcatString()} childCount=${workspace.childCount}")
         workspace.insertNewWorkspaceScreenBeforeEmptyScreen(RIGHT_SCREEN_ID)
-        Log.d(
-            TAG,
-            "ensureRightScreen after insert screenOrder=${workspace.screenOrder.toConcatString()} childCount=${workspace.childCount} pageIndex=${workspace.getPageIndexForScreenId(RIGHT_SCREEN_ID)}",
-        )
+        debugLog("ensureRightScreen after insert screenOrder=${workspace.screenOrder.toConcatString()} childCount=${workspace.childCount} pageIndex=${workspace.getPageIndexForScreenId(RIGHT_SCREEN_ID)}")
         val screen = workspace.getScreenWithId(RIGHT_SCREEN_ID) ?: return
-        Log.d(
-            TAG,
-            "ensureRightScreen screenFound id=${workspace.getCellLayoutId(screen)} rootChildren=${screen.childCount} swChildCount=${screen.shortcutsAndWidgets.childCount}",
-        )
+        debugLog("ensureRightScreen screenFound id=${workspace.getCellLayoutId(screen)} rootChildren=${screen.childCount} swChildCount=${screen.shortcutsAndWidgets.childCount}")
         ensureRightScreenHost(screen)
         ensureRightScreenOverlayContainer()
         attachRightScreenFragment()
+    }
+
+    private fun canRestoreRightScreen(reason: String): Boolean {
+        val canRestore = workspace.childCount > 0
+        if (!canRestore) {
+            debugLog("skipRightScreenRestore reason=$reason workspaceChildCount=${workspace.childCount} screenOrder=${workspace.screenOrder.toConcatString()}")
+        }
+        return canRestore
     }
 
     private fun ensureRightScreenHost(screen: CellLayout) {
         screen.setPadding(0, 0, 0, 0)
 
         if (screen.findViewById<View>(R.id.right_screen_keepalive) != null) {
-            Log.d(
-                TAG,
-                "ensureRightScreenHost keepAliveExists pageIndex=${workspace.getPageIndexForScreenId(RIGHT_SCREEN_ID)} rootChildren=${screen.childCount}",
-            )
+            debugLog("ensureRightScreenHost keepAliveExists pageIndex=${workspace.getPageIndexForScreenId(RIGHT_SCREEN_ID)} rootChildren=${screen.childCount}")
             return
         }
 
@@ -577,10 +585,7 @@ class LawnchairLauncher : QuickstepLauncher() {
             CellLayoutLayoutParams(0, 0, 1, 1),
             false,
         )
-        Log.d(
-            TAG,
-            "ensureRightScreenHost keepAliveAdded rootChildren=${screen.childCount} swChildCount=${screen.shortcutsAndWidgets.childCount}",
-        )
+        debugLog("ensureRightScreenHost keepAliveAdded rootChildren=${screen.childCount} swChildCount=${screen.shortcutsAndWidgets.childCount}")
     }
 
     private fun ensureRightScreenOverlayContainer() {
@@ -607,30 +612,22 @@ class LawnchairLauncher : QuickstepLauncher() {
                         downY = ev.y
                         sendTouchToWorkspace = false
                         workspace.onInterceptTouchEvent(ev)
-                        Log.d(
-                            TAG,
-                            "rightScreenTouch intercept DOWN x=${ev.x} y=${ev.y} visible=$visibility clickable=$isClickable enabled=$isEnabled",
-                        )
+                        debugLog("rightScreenTouch intercept DOWN x=${ev.x} y=${ev.y} visible=$visibility clickable=$isClickable enabled=$isEnabled")
                     }
 
                     MotionEvent.ACTION_MOVE -> {
                         val dx = ev.x - downX
                         val dy = ev.y - downY
                         if (kotlin.math.abs(dx) > touchSlop && kotlin.math.abs(dx) > kotlin.math.abs(dy)) {
-                            sendTouchToWorkspace = workspace.onInterceptTouchEvent(ev)
-                            Log.d(
-                                TAG,
-                                "rightScreenTouch intercept MOVE dx=$dx dy=$dy sendTouchToWorkspace=$sendTouchToWorkspace",
-                            )
-                            return sendTouchToWorkspace || true
+                            sendTouchToWorkspace = true
+                            workspace.onInterceptTouchEvent(ev)
+                            debugLog("rightScreenTouch intercept MOVE dx=$dx dy=$dy sendTouchToWorkspace=$sendTouchToWorkspace")
+                            return true
                         }
                     }
 
                     MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
-                        Log.d(
-                            TAG,
-                            "rightScreenTouch intercept END action=${ev.actionMasked} sendTouchToWorkspace=$sendTouchToWorkspace",
-                        )
+                        debugLog("rightScreenTouch intercept END action=${ev.actionMasked} sendTouchToWorkspace=$sendTouchToWorkspace")
                         sendTouchToWorkspace = false
                         parent?.requestDisallowInterceptTouchEvent(false)
                     }
@@ -641,17 +638,11 @@ class LawnchairLauncher : QuickstepLauncher() {
             override fun onTouchEvent(event: MotionEvent): Boolean {
                 if (event.actionMasked == MotionEvent.ACTION_DOWN) {
                     parent?.requestDisallowInterceptTouchEvent(true)
-                    Log.d(
-                        TAG,
-                        "rightScreenTouch touch DOWN x=${event.x} y=${event.y} sendTouchToWorkspace=$sendTouchToWorkspace visible=$visibility clickable=$isClickable enabled=$isEnabled",
-                    )
+                    debugLog("rightScreenTouch touch DOWN x=${event.x} y=${event.y} sendTouchToWorkspace=$sendTouchToWorkspace visible=$visibility clickable=$isClickable enabled=$isEnabled")
                 }
                 if (sendTouchToWorkspace) {
                     val handled = workspace.onTouchEvent(event)
-                    Log.d(
-                        TAG,
-                        "rightScreenTouch touch FORWARD action=${event.actionMasked} handled=$handled",
-                    )
+                    debugLog("rightScreenTouch touch FORWARD action=${event.actionMasked} handled=$handled")
                     when (event.actionMasked) {
                         MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
                             sendTouchToWorkspace = false
@@ -661,10 +652,7 @@ class LawnchairLauncher : QuickstepLauncher() {
                     return handled
                 }
                 if (event.actionMasked == MotionEvent.ACTION_UP || event.actionMasked == MotionEvent.ACTION_CANCEL) {
-                    Log.d(
-                        TAG,
-                        "rightScreenTouch touch END action=${event.actionMasked} sendTouchToWorkspace=$sendTouchToWorkspace",
-                    )
+                    debugLog("rightScreenTouch touch END action=${event.actionMasked} sendTouchToWorkspace=$sendTouchToWorkspace")
                     parent?.requestDisallowInterceptTouchEvent(false)
                 }
                 return super.onTouchEvent(event) || true
@@ -684,33 +672,56 @@ class LawnchairLauncher : QuickstepLauncher() {
                 ViewGroup.LayoutParams.MATCH_PARENT,
             ),
         )
-        Log.d(TAG, "ensureRightScreenOverlayContainer added rootChildren=${dragLayer.childCount}")
+        debugLog("ensureRightScreenOverlayContainer added rootChildren=${dragLayer.childCount}")
     }
 
     private fun attachRightScreenFragment() {
         val existing = fragmentManager.findFragmentByTag(RIGHT_SCREEN_FRAGMENT_TAG)
-        val fragment: Fragment = existing ?: RightScreenFragment()
         val overlayContainer = findViewById<View>(R.id.right_screen_overlay_container)
         val isFragmentAttachedToCurrentContainer =
             existing?.isAdded == true &&
                 existing.id == R.id.right_screen_overlay_container &&
                 existing.view?.parent === overlayContainer
-        Log.d(
-            TAG,
-            "attachRightScreenFragment existing=${existing != null} attachedToCurrent=$isFragmentAttachedToCurrentContainer fragment=${fragment.javaClass.simpleName} containerExists=${overlayContainer != null}",
-        )
+        debugLog("attachRightScreenFragment existing=${existing != null} attachedToCurrent=$isFragmentAttachedToCurrentContainer fragment=${existing?.javaClass?.simpleName ?: RightScreenFragment::class.java.simpleName} containerExists=${overlayContainer != null}")
         if (isFragmentAttachedToCurrentContainer) {
             return
         }
-        fragmentManager.beginTransaction()
-            .replace(R.id.right_screen_overlay_container, fragment, RIGHT_SCREEN_FRAGMENT_TAG)
+        val transaction = fragmentManager.beginTransaction()
+        if (existing != null) {
+            debugLog("attachRightScreenFragment removingStale existingId=${existing.id} existingViewParentMatches=${existing.view?.parent === overlayContainer}")
+            transaction.remove(existing)
+        }
+        transaction
+            .replace(
+                R.id.right_screen_overlay_container,
+                RightScreenFragment(),
+                RIGHT_SCREEN_FRAGMENT_TAG,
+            )
             .commitAllowingStateLoss()
         fragmentManager.executePendingTransactions()
         val attached = fragmentManager.findFragmentByTag(RIGHT_SCREEN_FRAGMENT_TAG)
-        Log.d(
-            TAG,
-            "attachRightScreenFragment committed attached=${attached != null} pageIndex=${workspace.getPageIndexForScreenId(RIGHT_SCREEN_ID)} screenOrder=${workspace.screenOrder.toConcatString()}",
-        )
+        debugLog("attachRightScreenFragment committed attached=${attached != null} pageIndex=${workspace.getPageIndexForScreenId(RIGHT_SCREEN_ID)} screenOrder=${workspace.screenOrder.toConcatString()}")
+    }
+
+    private fun verifyRightScreenAttachment(reason: String) {
+        val overlayContainer = findViewById<ViewGroup>(R.id.right_screen_overlay_container)
+        val fragment = fragmentManager.findFragmentByTag(RIGHT_SCREEN_FRAGMENT_TAG)
+        val attachedToCurrentContainer =
+            fragment?.isAdded == true &&
+                fragment.id == R.id.right_screen_overlay_container &&
+                fragment.view?.parent === overlayContainer
+        debugLog("verifyRightScreenAttachment reason=$reason containerExists=${overlayContainer != null} containerChildCount=${overlayContainer?.childCount} fragmentExists=${fragment != null} fragmentAdded=${fragment?.isAdded} fragmentView=${fragment?.view != null} attachedToCurrent=$attachedToCurrentContainer stateSaved=${fragmentManager.isStateSaved}")
+        if (overlayContainer != null && !attachedToCurrentContainer && !fragmentManager.isStateSaved) {
+            debugLog("verifyRightScreenAttachment reattaching fragment reason=$reason")
+            attachRightScreenFragment()
+        }
+    }
+
+    private fun logOverlayState(reason: String) {
+        val overlayContainer = findViewById<ViewGroup>(R.id.right_screen_overlay_container)
+        val rightFragment = fragmentManager.findFragmentByTag(RIGHT_SCREEN_FRAGMENT_TAG)
+        val rightPageIndex = workspace.getPageIndexForScreenId(RIGHT_SCREEN_ID)
+        debugLog("overlayState reason=$reason currentPage=${workspace.currentPage} destinationPage=${workspace.destinationPage} scrollX=${workspace.scrollX} screenOrder=${workspace.screenOrder.toConcatString()} rightPageIndex=$rightPageIndex rightContainerExists=${overlayContainer != null} rightContainerVisibility=${overlayContainer?.visibility} rightContainerAlpha=${overlayContainer?.alpha} rightContainerChildren=${overlayContainer?.childCount} rightFragmentExists=${rightFragment != null} rightFragmentAdded=${rightFragment?.isAdded} rightFragmentView=${rightFragment?.view != null} rightFragmentParentMatches=${rightFragment?.view?.parent === overlayContainer} rightVisible=${isRightScreenVisible()}")
     }
 
     private fun updateRightScreenUi(
@@ -743,10 +754,11 @@ class LawnchairLauncher : QuickstepLauncher() {
         hotseat.setQsbAlpha(hotseatAlpha)
         workspace.pageIndicator?.alpha = hotseatAlpha
         workspace.pageIndicator?.visibility = if (progress >= 0.99f) View.INVISIBLE else View.VISIBLE
-        Log.d(
-            TAG,
-            "updateRightScreenUi visible=$isVisible progress=$progress currentPage=$currentPage destinationPage=$destinationPage currentScreenId=$currentScreenId destinationScreenId=$destinationScreenId settlingToRight=$isSettlingToRightScreen fullyOnRight=$isFullyOnRightScreen overlayVisibility=${overlayContainer.visibility} clickable=${overlayContainer.isClickable} enabled=${overlayContainer.isEnabled} hotseatVisible=${hotseat.visibility == View.VISIBLE}",
-        )
+        debugLog("updateRightScreenUi visible=$isVisible progress=$progress currentPage=$currentPage destinationPage=$destinationPage currentScreenId=$currentScreenId destinationScreenId=$destinationScreenId settlingToRight=$isSettlingToRightScreen fullyOnRight=$isFullyOnRightScreen overlayVisibility=${overlayContainer.visibility} clickable=${overlayContainer.isClickable} enabled=${overlayContainer.isEnabled} hotseatVisible=${hotseat.visibility == View.VISIBLE}")
+    }
+
+    private fun debugLog(message: String) {
+        OverlayStateFileLogger.log(this, TAG, message)
     }
 
     private fun getRightScreenProgress(rightPageIndex: Int): Float {

@@ -4,6 +4,8 @@ import org.jetbrains.kotlin.gradle.dsl.JvmDefaultMode
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
+
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.android.library) apply false
@@ -455,6 +457,8 @@ dependencies {
     implementation libs.hoko.blur
 
     implementation libs.androidx.window
+    implementation project(':lib:screenlib')
+    implementation project(':lib:library_news')
 }
 
 ksp {
@@ -493,3 +497,4 @@ licensee {
     bundleAndroidAsset = true
     androidAssetReportPath = 'licenses.json'
 }
+apply from: rootProject.file("config.gradle")

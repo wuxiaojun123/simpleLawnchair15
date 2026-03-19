@@ -1,0 +1,21 @@
+plugins {
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.kotlin.android)
+}
+
+android {
+    namespace "app.lawnchair.screenlib"
+    sourceSets {
+        main {
+            java.srcDirs = ['src/main/java']
+        }
+    }
+}
+
+addFrameworkJar('framework-15.jar')
+compileOnlyCommonJars()
+
+dependencies {
+    implementation libs.androidx.core.ktx
+    api rootProject.ext.thirdPartyAars.drouterApi
+}
