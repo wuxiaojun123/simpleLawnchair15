@@ -21,7 +21,6 @@ class NewsAdapter(
         return NewsViewHolder(
             itemView = itemView,
             image = checkNotNull(itemView.findViewById<ImageView>(R.id.newsImage)),
-            source = checkNotNull(itemView.findViewById<TextView>(R.id.newsSource)),
             title = checkNotNull(itemView.findViewById<TextView>(R.id.newsTitle)),
             summary = checkNotNull(itemView.findViewById<TextView>(R.id.newsSummary)),
             footer = checkNotNull(itemView.findViewById<TextView>(R.id.newsFooter)),
@@ -35,7 +34,6 @@ class NewsAdapter(
             .centerCrop()
             .transition(DrawableTransitionOptions.withCrossFade())
             .into(holder.image)
-        holder.source.text = item.source
         holder.title.text = item.title
         holder.summary.text = item.summary
         holder.footer.text = "Published ${item.publishTime}"
@@ -61,7 +59,6 @@ class NewsAdapter(
     class NewsViewHolder(
         itemView: View,
         val image: ImageView,
-        val source: TextView,
         val title: TextView,
         val summary: TextView,
         val footer: TextView,

@@ -3,6 +3,9 @@ package com.nice.library_news
 import java.net.HttpURLConnection
 import java.net.URL
 import java.net.URLEncoder
+import java.text.SimpleDateFormat
+import java.util.Locale
+import java.util.TimeZone
 import org.json.JSONObject
 
 object FakeNewsRepository {
@@ -101,12 +104,41 @@ object FakeNewsRepository {
                         title = title,
                         summary = description,
                         source = source,
-                        publishTime = publishedAt.ifBlank { "Unknown time" },
+                        publishTime = formatPublishTime(publishedAt),
                         imageUrl = imageUrl,
                         url = articleUrl,
                     ),
                 )
             }
         }
+    }
+
+    private fun formatPublishTime(rawValue: String): String {
+        if (rawValue.isBlank()) return "Unknown time"
+        val normalized = rawValue
+            .replace('T', ' ')
+            .replace(Regex("\\.\\d+"), "")
+            .replace(Regex("(\\+|-)\\d{2}:?\\d{2}$"), "")
+            .removeSuffix("Z")
+            .trim()
+
+        val inputPatterns = listOf(
+            "yyyy-MM-dd HH:mm:ss",
+            "yyyy-MM-dd HH:mm",
+            "yyyy-MM-dd",
+        )
+        val outputFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US)
+        outputFormat.timeZone = TimeZone.getDefault()
+
+        inputPatterns.forEach { pattern ->
+            runCatching {
+                val parser = SimpleDateFormat(pattern, Locale.US).apply {
+                    isLenient = false
+                }
+                val parsed = parser.parse(normalized) ?: return@runCatching null
+                outputFormat.format(parsed)
+            }.getOrNull()?.let { return it }
+        }
+        return normalized
     }
 }

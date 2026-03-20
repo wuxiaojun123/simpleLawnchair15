@@ -64,8 +64,10 @@ import app.lawnchair.ui.popup.LawnchairShortcut
 import app.lawnchair.util.getThemedIconPacksInstalled
 import app.lawnchair.util.unsafeLazy
 import app.lawnchair.views.LawnchairFloatingSurfaceView
+import com.nice.library_news.NewsPreloadManager
 import com.android.launcher3.AbstractFloatingView
 import com.android.launcher3.BaseActivity
+import com.android.launcher3.BuildConfig
 import com.android.launcher3.BubbleTextView
 import com.android.launcher3.CellLayout
 import com.android.launcher3.GestureNavContract
@@ -101,6 +103,7 @@ import com.patrykmichalik.opto.core.firstBlocking
 import com.patrykmichalik.opto.core.onEach
 import dev.kdrag0n.monet.theme.ColorScheme
 import java.util.stream.Stream
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -166,17 +169,23 @@ class LawnchairLauncher : QuickstepLauncher(), LeftScreenHostActions {
     private val userPresentReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             if (intent?.action == Intent.ACTION_USER_PRESENT) {
+                lifecycleScope.launch(Dispatchers.IO) {
+                    NewsPreloadManager.preloadOnFirstUnlockIfNeeded(this@LawnchairLauncher)
+                }
                 logOverlayState("userPresent:beforeEnsure")
                 defaultOverlay.ensureContentAttached()
-                ensureRightScreen()
-                updateRightScreenUi()
-                verifyRightScreenAttachment("userPresent")
+                syncRightScreenAvailability()
+                if (isRightScreenEnabled()) {
+                    ensureRightScreen()
+                    updateRightScreenUi()
+                    verifyRightScreenAttachment("userPresent")
+                }
                 logOverlayState("userPresent:afterEnsure")
-                Toast.makeText(
-                    this@LawnchairLauncher,
-                    R.string.user_present_toast,
-                    Toast.LENGTH_SHORT,
-                ).show()
+//                Toast.makeText(
+//                    this@LawnchairLauncher,
+//                    R.string.user_present_toast,
+//                    Toast.LENGTH_SHORT,
+//                ).show()
             }
         }
     }
@@ -486,6 +495,7 @@ class LawnchairLauncher : QuickstepLauncher(), LeftScreenHostActions {
         dragLayer.post {
             logOverlayState("onResume:beforeEnsure")
             defaultOverlay.ensureContentAttached()
+            syncRightScreenAvailability()
             if (canRestoreRightScreen("onResume")) {
                 ensureRightScreen()
                 updateRightScreenUi()
@@ -538,6 +548,10 @@ class LawnchairLauncher : QuickstepLauncher(), LeftScreenHostActions {
     override fun finishBindingItems(pagesBoundFirst: com.android.launcher3.util.IntSet?) {
         super.finishBindingItems(pagesBoundFirst)
         debugLog("finishBindingItems pagesBoundFirst=$pagesBoundFirst screenOrderBefore=${workspace.screenOrder.toConcatString()} childCount=${workspace.childCount}")
+        syncRightScreenAvailability()
+        if (!isRightScreenEnabled()) {
+            return
+        }
         ensureRightScreen()
         updateRightScreenUi()
     }
@@ -545,6 +559,10 @@ class LawnchairLauncher : QuickstepLauncher(), LeftScreenHostActions {
     override fun getDefaultOverlay(): LauncherOverlayManager = defaultOverlay
 
     private fun ensureRightScreen() {
+        if (!isRightScreenEnabled()) {
+            debugLog("ensureRightScreen skipped disabled")
+            return
+        }
         debugLog("ensureRightScreen before insert screenOrder=${workspace.screenOrder.toConcatString()} childCount=${workspace.childCount}")
         workspace.insertNewWorkspaceScreenBeforeEmptyScreen(RIGHT_SCREEN_ID)
         debugLog("ensureRightScreen after insert screenOrder=${workspace.screenOrder.toConcatString()} childCount=${workspace.childCount} pageIndex=${workspace.getPageIndexForScreenId(RIGHT_SCREEN_ID)}")
@@ -556,9 +574,9 @@ class LawnchairLauncher : QuickstepLauncher(), LeftScreenHostActions {
     }
 
     private fun canRestoreRightScreen(reason: String): Boolean {
-        val canRestore = workspace.childCount > 0
+        val canRestore = isRightScreenEnabled() && workspace.childCount > 0
         if (!canRestore) {
-            debugLog("skipRightScreenRestore reason=$reason workspaceChildCount=${workspace.childCount} screenOrder=${workspace.screenOrder.toConcatString()}")
+            debugLog("skipRightScreenRestore reason=$reason enabled=${isRightScreenEnabled()} workspaceChildCount=${workspace.childCount} screenOrder=${workspace.screenOrder.toConcatString()}")
         }
         return canRestore
     }
@@ -589,6 +607,9 @@ class LawnchairLauncher : QuickstepLauncher(), LeftScreenHostActions {
     }
 
     private fun ensureRightScreenOverlayContainer() {
+        if (!isRightScreenEnabled()) {
+            return
+        }
         val dragLayer = findViewById<ViewGroup>(R.id.drag_layer) as? FrameLayout ?: return
         if (dragLayer.findViewById<View>(R.id.right_screen_overlay_container) != null) {
             return
@@ -676,6 +697,9 @@ class LawnchairLauncher : QuickstepLauncher(), LeftScreenHostActions {
     }
 
     private fun attachRightScreenFragment() {
+        if (!isRightScreenEnabled()) {
+            return
+        }
         val existing = fragmentManager.findFragmentByTag(RIGHT_SCREEN_FRAGMENT_TAG)
         val overlayContainer = findViewById<View>(R.id.right_screen_overlay_container)
         val isFragmentAttachedToCurrentContainer =
@@ -704,6 +728,9 @@ class LawnchairLauncher : QuickstepLauncher(), LeftScreenHostActions {
     }
 
     private fun verifyRightScreenAttachment(reason: String) {
+        if (!isRightScreenEnabled()) {
+            return
+        }
         val overlayContainer = findViewById<ViewGroup>(R.id.right_screen_overlay_container)
         val fragment = fragmentManager.findFragmentByTag(RIGHT_SCREEN_FRAGMENT_TAG)
         val attachedToCurrentContainer =
@@ -728,6 +755,10 @@ class LawnchairLauncher : QuickstepLauncher(), LeftScreenHostActions {
         currentPage: Int = workspace.currentPage,
         destinationPage: Int = workspace.destinationPage,
     ) {
+        if (!isRightScreenEnabled()) {
+            resetRightScreenUi()
+            return
+        }
         val overlayContainer = findViewById<View>(R.id.right_screen_overlay_container) ?: return
         val rightPageIndex = workspace.getPageIndexForScreenId(RIGHT_SCREEN_ID)
         val currentScreenId = workspace.getScreenIdForPageIndex(currentPage)
@@ -759,6 +790,48 @@ class LawnchairLauncher : QuickstepLauncher(), LeftScreenHostActions {
 
     private fun debugLog(message: String) {
         OverlayStateFileLogger.log(this, TAG, message)
+    }
+
+    private fun isRightScreenEnabled(): Boolean = BuildConfig.RIGHT_SCREEN_ENABLED
+
+    private fun syncRightScreenAvailability() {
+        if (isRightScreenEnabled()) {
+            return
+        }
+        cleanupRightScreen()
+        resetRightScreenUi()
+    }
+
+    private fun cleanupRightScreen() {
+        val existing = fragmentManager.findFragmentByTag(RIGHT_SCREEN_FRAGMENT_TAG)
+        if (existing != null && !fragmentManager.isStateSaved) {
+            fragmentManager.beginTransaction()
+                .remove(existing)
+                .commitAllowingStateLoss()
+            fragmentManager.executePendingTransactions()
+        }
+        val overlayContainer = findViewById<ViewGroup>(R.id.right_screen_overlay_container)
+        val dragLayer = findViewById<ViewGroup>(R.id.drag_layer) as? FrameLayout
+        if (overlayContainer != null && dragLayer != null) {
+            dragLayer.removeView(overlayContainer)
+        }
+    }
+
+    private fun resetRightScreenUi() {
+        findViewById<View>(R.id.right_screen_overlay_container)?.apply {
+            visibility = View.GONE
+            alpha = 0f
+            translationX = 0f
+            isClickable = false
+            isFocusable = false
+            isEnabled = false
+        }
+        hotseat.visibility = View.VISIBLE
+        hotseat.alpha = 1f
+        hotseat.setIconsAlpha(1f)
+        hotseat.setQsbAlpha(1f)
+        workspace.pageIndicator?.alpha = 1f
+        workspace.pageIndicator?.visibility = View.VISIBLE
     }
 
     private fun getRightScreenProgress(rightPageIndex: Int): Float {
