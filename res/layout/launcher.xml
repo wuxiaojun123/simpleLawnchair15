@@ -80,4 +80,11 @@
 
     </com.android.launcher3.dragndrop.DragLayer>
 
+    <FrameLayout
+        android:id="@+id/ad_banner_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
+        android:visibility="gone" />
+
 </com.android.launcher3.LauncherRootView>

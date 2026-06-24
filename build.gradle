@@ -155,6 +155,7 @@ final def majorVersion = versionDisplayName.split("\\.")[0]
 final def quickstepMinSdk = "29"
 final def quickstepMaxSdk = "35"
 final def rightScreenEnabled = (findProperty("rightScreenEnabled") ?: "false").toString().toBoolean()
+final def adEnabled = (findProperty("adEnabled") ?: "false").toString().toBoolean()
 
 android {
     namespace "com.android.launcher3"
@@ -168,6 +169,7 @@ android {
         buildConfigField "String", "COMMIT_HASH", "\"${buildCommit}\""
         buildConfigField "boolean", "ENABLE_AUTO_INSTALLS_LAYOUT", "false"
         buildConfigField "boolean", "RIGHT_SCREEN_ENABLED", rightScreenEnabled.toString()
+        buildConfigField "boolean", "AD_ENABLED", adEnabled.toString()
 
         manifestPlaceholders.quickstepMinSdk = quickstepMinSdk
         manifestPlaceholders.quickstepMaxSdk = quickstepMaxSdk
@@ -458,6 +460,11 @@ dependencies {
 
     implementation libs.hoko.blur
 
+    // Ad & Attribution
+    implementation libs.google.ads
+    implementation libs.google.ump
+    implementation libs.android.installreferrer
+
     implementation libs.androidx.window
     implementation project(':lib:screenlib')
     implementation project(':lib:library_news')
@@ -495,6 +502,8 @@ licensee {
     allowUrl("https://github.com/patrykmichalik/opto/blob/master/LICENSE")
     allowUrl("https://github.com/RikkaApps/HiddenApiRefinePlugin/blob/main/LICENSE")
     allowUrl("https://opensource.org/licenses/mit-license.php")
+    allowUrl("https://developer.android.com/studio/terms.html")
+    allow(SpdxId.MIT)
 
     bundleAndroidAsset = true
     androidAssetReportPath = 'licenses.json'

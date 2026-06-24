@@ -45,6 +45,8 @@ import app.lawnchair.util.restartLauncher
 import app.lawnchair.util.unsafeLazy
 import app.lawnchair.views.ComposeBottomSheet
 import com.didi.drouter.api.DRouter
+import app.lawnchair.bi.a.Adm
+import app.lawnchair.bi.at.InsRef
 import com.android.launcher3.BuildConfig
 import com.android.launcher3.InvariantDeviceProfile
 import com.android.launcher3.Launcher
@@ -68,6 +70,23 @@ class LawnchairApp : Application() {
         DRouter.init(this)
         QuickStepContract.sRecentsDisabled = !recentsEnabled
         Flowerpot.Manager.getInstance(this)
+        initAdAndAttribution()
+    }
+
+    private fun initAdAndAttribution() {
+        if (!BuildConfig.AD_ENABLED) return
+
+        // Initialize attribution
+        InsRef.initialize(this)
+
+        // Initialize ad system from assets/spaces.json
+        Adm.debug = BuildConfig.DEBUG
+        try {
+            val configJson = assets.open("spaces.json").bufferedReader().use { it.readText() }
+            Adm.init(this, configJson)
+        } catch (e: Exception) {
+            Log.e(TAG, "Failed to load ad config", e)
+        }
     }
 
     fun hideClockInStatusBar() {

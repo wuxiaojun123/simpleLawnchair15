@@ -1,6 +1,8 @@
 package app.lawnchair
 
 import android.app.Fragment
+import app.lawnchair.bi.a.NewsAdSlotProvider
+import com.android.launcher3.BuildConfig
 import com.nice.library_news.NewsLeftScreenFragment
 import com.nice.screebkub.ILeftScreenService
 import com.nice.screebkub.OverlayStateFileLogger
@@ -23,6 +25,9 @@ object LeftScreenFragmentResolver {
         }.getOrNull()
 
         val resolved = fragment ?: NewsLeftScreenFragment()
+        if (resolved is NewsLeftScreenFragment && BuildConfig.AD_ENABLED) {
+            resolved.adSlotProvider = NewsAdSlotProvider()
+        }
         OverlayStateFileLogger.log(
             launcher,
             TAG,

@@ -1,0 +1,65 @@
+{
+  "platform": {
+    "name": "admob",
+    "appid": "ca-app-pub-3940256099942544~3347511713",
+    "appkey": ""
+  },
+  "placement": [
+    {
+      "id": "1001",
+      "type": "splash",
+      "extras": {},
+      "units": [
+        {"uid": "ca-app-pub-3940256099942544/9257395921"}
+      ]
+    },
+    {
+      "id": "2001",
+      "type": "banner",
+      "extras": {},
+      "units": [
+        {"uid": "ca-app-pub-3940256099942544/9214589741"}
+      ]
+    },
+    {
+      "id": "3001",
+      "type": "interstitial",
+      "extras": {},
+      "units": [
+        {"uid": "ca-app-pub-3940256099942544/1033173712"}
+      ]
+    },
+    {
+      "id": "4001",
+      "type": "reward",
+      "extras": {},
+      "units": [
+        {"uid": "ca-app-pub-3940256099942544/5224354917"}
+      ]
+    },
+    {
+      "id": "4002",
+      "type": "reward",
+      "extras": {},
+      "units": [
+        {"uid": "ca-app-pub-3940256099942544/5354046379"}
+      ]
+    },
+    {
+      "id": "5001",
+      "type": "native",
+      "extras": {},
+      "units": [
+        {"uid": "ca-app-pub-3940256099942544/2247696110"}
+      ]
+    },
+    {
+      "id": "5002",
+      "type": "native",
+      "extras": {},
+      "units": [
+        {"uid": "ca-app-pub-3940256099942544/1044960115"}
+      ]
+    }
+  ]
+}

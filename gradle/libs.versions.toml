@@ -49,6 +49,9 @@ slice = "1.1.0-alpha02"
 smartspacer = "1.1.2"
 uiautomator = "2.3.0"
 window = "1.5.1"
+playServicesAds = "24.4.0"
+installReferrer = "2.2"
+ump = "3.1.0"
 
 agp = "8.13.1"
 baselineprofile = "1.4.1"
@@ -164,6 +167,9 @@ rikka-annotation-processor = { module = "dev.rikka.tools.refine:annotation-proce
 rikka-refine-runtime = { group = "dev.rikka.tools.refine", name = "runtime", version.ref = "refine" }
 smartspacer-sdk = { group = "com.kieronquinn.smartspacer", name = "sdk-client", version.ref = "smartspacer" }
 xdrop-fuzzywuzzy = { group = "me.xdrop", name = "fuzzywuzzy", version.ref = "fuzzywuzzy" }
+google-ads = { group = "com.google.android.gms", name = "play-services-ads", version.ref = "playServicesAds" }
+google-ump = { group = "com.google.android.ump", name = "user-messaging-platform", version.ref = "ump" }
+android-installreferrer = { group = "com.android.installreferrer", name = "installreferrer", version.ref = "installReferrer" }
 junit = { group = "junit", name = "junit", version.ref = "junitVersion" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 

@@ -42,6 +42,12 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.lifecycleScope
 import app.lawnchair.LawnchairApp.Companion.showQuickstepWarningIfNecessary
+import app.lawnchair.bi.a.Adm
+import app.lawnchair.bi.a.AdBase
+import app.lawnchair.bi.a.AdErrorC
+import app.lawnchair.bi.a.AdLoadCallback
+import app.lawnchair.bi.a.AdShowCallback
+import app.lawnchair.bi.a.ViewContainer
 import app.lawnchair.compat.LawnchairQuickstepCompat
 import app.lawnchair.data.AppDatabase
 import app.lawnchair.data.wallpaper.service.WallpaperService
@@ -165,6 +171,7 @@ class LawnchairLauncher : QuickstepLauncher(), LeftScreenHostActions {
 
     private lateinit var colorScheme: ColorScheme
     private var hasBackGesture = false
+    private var bannerAdLoaded = false
     private var isUserPresentReceiverRegistered = false
     private val userPresentReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
@@ -293,6 +300,46 @@ class LawnchairLauncher : QuickstepLauncher(), LeftScreenHostActions {
         reloadIconsIfNeeded()
 
         AppDatabase.INSTANCE.get(this).checkpointSync()
+
+        loadBannerAd()
+    }
+
+    private fun loadBannerAd() {
+        if (!BuildConfig.AD_ENABLED || bannerAdLoaded) return
+
+        val bannerContainer = findViewById<FrameLayout>(R.id.ad_banner_container) ?: return
+
+        Adm.loadAd(this, "2001", object : AdLoadCallback {
+            override fun onSuccess(placementName: String, ad: AdBase) {
+                bannerAdLoaded = true
+                bannerContainer.visibility = View.VISIBLE
+                Adm.showAd(
+                    this@LawnchairLauncher,
+                    "2001",
+                    ViewContainer(bannerContainer),
+                    null,
+                    object : AdShowCallback {
+                        override fun onSuccess(placementName: String, ad: AdBase) {
+                            android.util.Log.d(TAG, "Banner ad shown")
+                        }
+                        override fun onFailure(placementName: String, error: AdErrorC) {
+                            android.util.Log.w(TAG, "Banner show failed: ${error.message}")
+                            bannerContainer.visibility = View.GONE
+                        }
+                        override fun onClicked(placementName: String, ad: AdBase) {}
+                        override fun onClosed(placementName: String, ad: AdBase) {
+                            bannerContainer.visibility = View.GONE
+                        }
+                        override fun onRewarded(placementName: String, ad: AdBase) {}
+                    }
+                )
+            }
+
+            override fun onFailure(placementName: String, error: AdErrorC) {
+                android.util.Log.w(TAG, "Banner load failed: ${error.message}")
+                bannerContainer.visibility = View.GONE
+            }
+        })
     }
 
     override fun collectStateHandlers(out: MutableList<StateHandler<LauncherState>>) {
@@ -543,6 +590,9 @@ class LawnchairLauncher : QuickstepLauncher(), LeftScreenHostActions {
         super.onDestroy()
         // Only actually closes if required, safe to call if not enabled
         SmartspacerClient.close()
+        if (BuildConfig.AD_ENABLED) {
+            Adm.destroyAd("2001")
+        }
     }
 
     override fun finishBindingItems(pagesBoundFirst: com.android.launcher3.util.IntSet?) {

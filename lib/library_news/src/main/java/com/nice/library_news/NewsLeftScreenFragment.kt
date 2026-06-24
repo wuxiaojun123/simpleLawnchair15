@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 
 class NewsLeftScreenFragment : Fragment() {
+    var adSlotProvider: AdSlotProvider? = null
     private val handler = Handler(Looper.getMainLooper())
     private val executor = java.util.concurrent.Executors.newSingleThreadExecutor()
     private var nextPage = 1
@@ -57,6 +58,7 @@ class NewsLeftScreenFragment : Fragment() {
             }
         }
 
+        adapter.adSlotProvider = adSlotProvider
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = this@NewsLeftScreenFragment.adapter
         recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
