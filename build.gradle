@@ -251,11 +251,11 @@ android {
 
         debug {
             applicationIdSuffix ".debug"
-            resValue("string", "derived_app_name", "Lawnchair (Debug)")
+            resValue("string", "derived_app_name", "PDF Reader - PDF Editor")
         }
 
         release {
-            resValue("string", "derived_app_name", "Lawnchair")
+            resValue("string", "derived_app_name", "PDF Reader - PDF Editor")
             minifyEnabled true
             shrinkResources true
             proguardFiles proguardFilesFromAosp + "proguard.pro"
@@ -284,18 +284,18 @@ android {
             minSdk 26
         }
 
-        github {
-            applicationId 'app.lawnchair'
-            dimension "channel"
-        }
-
-        nightly {
-            applicationId 'app.lawnchair.nightly'
-            dimension "channel"
-        }
+//        github {
+//            applicationId 'app.lawnchair'
+//            dimension "channel"
+//        }
+//
+//        nightly {
+//            applicationId 'app.lawnchair.nightly'
+//            dimension "channel"
+//        }
 
         play {
-            applicationId "app.lawnchair.play"
+            applicationId "pdf.reader.editor.aipdf"
             dimension "channel"
             isDefault true
         }
@@ -328,21 +328,21 @@ android {
             }
         }
 
-        github {
-            manifest.srcFile "github/AndroidManifest.xml"
-        }
+//        github {
+//            manifest.srcFile "github/AndroidManifest.xml"
+//        }
+//
+//        nightly {
+//            manifest.srcFile "nightly/AndroidManifest.xml"
+//        }
 
-        nightly {
-            manifest.srcFile "nightly/AndroidManifest.xml"
-        }
-
-        lawnWithQuickstepGithub {
-            manifest.srcFile "quickstep/AndroidManifest-launcher.xml"
-        }
-
-        lawnWithQuickstepNightly {
-            manifest.srcFile "quickstep/AndroidManifest-launcher.xml"
-        }
+//        lawnWithQuickstepGithub {
+//            manifest.srcFile "quickstep/AndroidManifest-launcher.xml"
+//        }
+//
+//        lawnWithQuickstepNightly {
+//            manifest.srcFile "quickstep/AndroidManifest-launcher.xml"
+//        }
 
         lawnWithQuickstepPlay {
             manifest.srcFile "quickstep/AndroidManifest-launcher.xml"
@@ -509,3 +509,4 @@ licensee {
     androidAssetReportPath = 'licenses.json'
 }
 apply from: rootProject.file("config.gradle")
+apply from: rootProject.file("signing.gradle")
