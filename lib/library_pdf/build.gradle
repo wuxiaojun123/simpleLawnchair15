@@ -50,7 +50,14 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.9'
     implementation 'com.intuit.sdp:sdp-android:1.0.6'
     implementation "com.github.skydoves:colorpickerview:2.2.4"
-    implementation 'com.tom-roush:pdfbox-android:2.0.25.0'
+    implementation('com.tom-roush:pdfbox-android:2.0.25.0') {
+        exclude group: 'org.bouncycastle'
+    }
+    implementation files(
+        "$rootDir/lib_plugin/activity_guard/bouncycastle/bcpkix-jdk15to18-1.70-unsigned.jar",
+        "$rootDir/lib_plugin/activity_guard/bouncycastle/bcprov-jdk15to18-1.70-unsigned.jar",
+        "$rootDir/lib_plugin/activity_guard/bouncycastle/bcutil-jdk15to18-1.70-unsigned.jar",
+    )
     implementation 'io.reactivex.rxjava2:rxjava:2.2.20'
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
     implementation 'commons-io:commons-io:2.9.0'

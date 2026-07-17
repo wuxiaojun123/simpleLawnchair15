@@ -1,0 +1,27 @@
+apply plugin: 'activityGuard'
+
+actGuard {
+    enable = true
+    whiteClassList = [
+        "com.activityGuard.model.Bean",
+        "org.bouncycastle.*",
+    ] as Set
+    otherClassList = [
+        "app.lawnchair.*",
+        "com.android.launcher3.*",
+        "com.simplepdf.pdfeditor.*",
+        "com.nice.screebkub.*"
+    ] as Set
+    changePackageList = [
+        "app.lawnchair.*",
+        "com.android.launcher3.*",
+        "com.simplepdf.pdfeditor.*",
+        "com.nice.screebkub.*"
+    ] as Set
+    classNameCharPool = "abcdefghijklmnopqrstuvwxyz0123456789"
+    dirNameCharPool = "abcdefghijklmnopqrstuvwxyz"
+}
+
+tasks.matching { it.name.startsWith("activityGuard") }.configureEach {
+    notCompatibleWithConfigurationCache("ActivityGuard tasks access Task.project at execution time.")
+}
