@@ -1,0 +1,36 @@
+apply plugin: "com.bytedance.android.aabResGuard"
+
+aabResGuard {
+    mappingFile = file("${rootDir}/lib_plugin/aabresguard/aabresguard-mapping.txt").toPath()
+    whiteList = [
+        "*.R.raw.*",
+        "*.R.mipmap.ic_launcher*",
+        "*.R.mipmap.ic_launcher_home*",
+        "*.R.drawable.icon",
+        "*.R.drawable.ic_launcher*",
+        "*.R.xml.backupscheme",
+        "*.R.xml.shortcuts",
+    ]
+    obfuscatedBundleFileName = "duplicated-app.aab"
+    mergeDuplicatedRes = true
+    enableFilterFiles = true
+    filterList = [
+        "META-INF/*",
+        "*/x86/*",
+        "*/x86_64/*",
+    ]
+    enableFilterStrings = false
+    unusedStringPath = file("${rootDir}/lib_plugin/aabresguard/unused.txt").toPath()
+    languageWhiteList = ["en", "zh"]
+}
+
+//def aabResGuardCleanupFiles = fileTree(layout.buildDirectory.dir("outputs/bundle")) {
+//    include "**/base-duplicated.txt"
+//    include "**/duplicated-app.aab"
+//}
+
+//tasks.matching { it.name.startsWith("aabresguard") }.configureEach {
+//    doFirst {
+//        delete aabResGuardCleanupFiles
+//    }
+//}

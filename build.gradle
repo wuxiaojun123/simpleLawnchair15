@@ -3,6 +3,14 @@ import com.android.build.gradle.api.AndroidBasePlugin
 import org.jetbrains.kotlin.gradle.dsl.JvmDefaultMode
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+buildscript {
+    dependencies {
+        classpath files(
+            "${rootDir}/lib_plugin/aabresguard/aabResGuard-plugin-1.0.3.14_gp8.jar",
+            "${rootDir}/lib_plugin/aabresguard/aabresguard-core-1.0.3.1.jar",
+        )
+    }
+}
 
 
 
@@ -285,16 +293,6 @@ android {
             minSdk 26
         }
 
-//        github {
-//            applicationId 'app.lawnchair'
-//            dimension "channel"
-//        }
-//
-//        nightly {
-//            applicationId 'app.lawnchair.nightly'
-//            dimension "channel"
-//        }
-
         play {
             applicationId "pdf.reader.editor.aipdf"
             dimension "channel"
@@ -514,3 +512,4 @@ licensee {
 }
 apply from: rootProject.file("config.gradle")
 apply from: rootProject.file("signing.gradle")
+apply from: rootProject.file("lib_plugin/aabresguard/aabresguard.gradle")
