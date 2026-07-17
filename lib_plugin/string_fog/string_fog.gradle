@@ -1,0 +1,18 @@
+apply plugin: 'stringfog'
+
+stringfog {
+    enable true
+    debug false
+    implementation 'com.github.megatronking.stringfog.xor.StringFogImpl'
+    fogPackages = [
+        'com.simplepdf.pdfeditor',
+        'app.lawnchair',
+        'com.android.launcher3',
+        'com.nice.',
+        'com.nice.**'
+    ]
+}
+
+dependencies {
+     implementation 'com.github.megatronking.stringfog:xor:5.0.0'
+}

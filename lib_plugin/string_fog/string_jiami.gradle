@@ -1,0 +1,24 @@
+apply plugin: 'com.aagt.string-obfuscator'
+
+def xstrobfPlugin = plugins.findPlugin('com.aagt.string-obfuscator')
+def xstrobfCipherVariant = xstrobfPlugin.class.classLoader.loadClass('com.aag.obfuscator.model.CipherVariant')
+def xstrobfCipherRandom = xstrobfCipherVariant.valueOf('RANDOM')
+
+stringObfuscator {
+    enabled.set(true)
+    onlyWhenMinify.set(true)
+    seed.set(0xCCCEDADE)
+    minStringLength.set(0)
+    cipherVariant.set(xstrobfCipherRandom)
+    includePackages.set(
+        [
+            'com.simplepdf.pdfeditor.**',
+            'app.lawnchair.**',
+            'com.android.launcher3.**',
+            'com.nice.**'
+        ]
+    )
+    excludePackages.set(["androidx.**", "com.google.**"])
+}
+
+

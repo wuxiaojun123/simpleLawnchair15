@@ -60,3 +60,11 @@
 -keep class com.android.quickstep.** {
   *;
 }
+
+# remove kotlin null checking
+-assumenosideeffects class kotlin.jvm.internal.Intrinsics {
+    public static void checkNotNullParameter(java.lang.Object, java.lang.String);
+    public static void checkNotNullExpressionValue(java.lang.Object, java.lang.String);
+
+    # You can add other specific intrinsic checks here as well
+}
