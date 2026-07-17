@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:tag="layout/activity_terms_services_0"
+        android:background="@color/term_background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:gravity="center"
+            android:orientation="vertical"
+            android:id="@+id/ll1"
+            android:background="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@+id/guideline"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:textSize="@dimen/_20sdp"
+                android:layout_gravity="center"
+                android:text="Terms of Service"
+                style="@style/TextViewBold" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_gravity="center"
+                android:layout_width="@dimen/_60sdp"
+                android:layout_height="@dimen/_60sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginBottom="@dimen/_10sdp"
+                android:src="@drawable/term_icon"
+                android:tint="@color/textColor3" />
+
+            <TextView
+                android:textSize="@dimen/_12sdp"
+                android:textStyle="normal"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:id="@+id/tvNotes"
+                android:layout_marginLeft="@dimen/_18sdp"
+                android:layout_marginRight="@dimen/_18sdp"
+                android:text="@string/terms"
+                style="@style/TextViewRegular" />
+        </LinearLayout>
+
+        <androidx.constraintlayout.widget.Guideline
+            android:orientation="horizontal"
+            android:id="@+id/guideline"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintGuide_percent="0.45" />
+
+        <LinearLayout
+            android:gravity="center"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@+id/addeptContinue"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/guideline">
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/tvTerms"
+                android:layout_marginLeft="@dimen/_15sdp"
+                android:layout_marginTop="@dimen/_6sdp"
+                android:layout_marginRight="@dimen/_15sdp"
+                app:contentPadding="0dp"
+                style="@style/CardViewCommon">
+
+                <LinearLayout
+                    android:gravity="start|center_vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:textSize="@dimen/_14sdp"
+                        android:layout_width="0dp"
+                        android:text="@string/termsOfService"
+                        android:layout_weight="1"
+                        android:textAllCaps="true"
+                        android:layout_marginStart="@dimen/_12sdp"
+                        style="@style/TextViewRegular" />
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:padding="@dimen/_11sdp"
+                        android:src="@drawable/right"
+                        style="@style/ImageViewMedium" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/tvPrivacyPolicy"
+                android:layout_marginLeft="@dimen/_15sdp"
+                android:layout_marginTop="@dimen/_15sdp"
+                android:layout_marginRight="@dimen/_15sdp"
+                app:contentPadding="0dp"
+                style="@style/CardViewCommon">
+
+                <LinearLayout
+                    android:gravity="start|center_vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:textSize="@dimen/_14sdp"
+                        android:layout_width="0dp"
+                        android:text="@string/privacy_policy"
+                        android:layout_weight="1"
+                        android:textAllCaps="true"
+                        android:layout_marginStart="@dimen/_12sdp"
+                        style="@style/TextViewRegular" />
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:padding="@dimen/_11sdp"
+                        android:src="@drawable/right"
+                        style="@style/ImageViewMedium" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/tvAgreement"
+                android:layout_marginLeft="@dimen/_15sdp"
+                android:layout_marginTop="@dimen/_15sdp"
+                android:layout_marginRight="@dimen/_15sdp"
+                android:layout_marginBottom="@dimen/_6sdp"
+                app:contentPadding="0dp"
+                style="@style/CardViewCommon">
+
+                <LinearLayout
+                    android:gravity="start|center_vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:textSize="@dimen/_14sdp"
+                        android:layout_width="0dp"
+                        android:layout_marginLeft="@dimen/_12sdp"
+                        android:layout_marginRight="@dimen/_12sdp"
+                        android:text="@string/user_agreement"
+                        android:layout_weight="1"
+                        android:textAllCaps="true"
+                        style="@style/TextViewRegular" />
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:padding="@dimen/_11sdp"
+                        android:src="@drawable/right"
+                        style="@style/ImageViewMedium" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+        </LinearLayout>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/addeptContinue"
+            android:layout_marginLeft="@dimen/_10sdp"
+            android:layout_marginRight="@dimen/_10sdp"
+            android:layout_marginBottom="@dimen/_15sdp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            style="@style/CardViewCommon">
+
+            <LinearLayout
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_4sdp"
+                android:layout_marginBottom="@dimen/_4sdp">
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:textSize="@dimen/_14sdp"
+                    android:textColor="@color/textColor3"
+                    android:text="@string/accept_term"
+                    android:textAllCaps="true"
+                    style="@style/TextViewBold" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

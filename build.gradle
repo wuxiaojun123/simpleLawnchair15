@@ -190,6 +190,7 @@ android {
 
     buildFeatures {
         aidl true
+        dataBinding true
         buildConfig true
         resValues true
     }
@@ -467,7 +468,7 @@ dependencies {
 
     implementation libs.androidx.window
     implementation project(':lib:screenlib')
-    implementation project(':lib:library_news')
+    implementation project(':lib:library_pdf')
 }
 
 ksp {
@@ -497,12 +498,15 @@ licensee {
     allow(SpdxId.Apache_20)
     allow(SpdxId.BSD_3_Clause)
     allow(SpdxId.GPL_20_or_later)
+    allow(SpdxId.CC0_10)
     allowDependency(libs.libsu.core)
     allowDependency(libs.libsu.service)
     allowUrl("https://github.com/patrykmichalik/opto/blob/master/LICENSE")
     allowUrl("https://github.com/RikkaApps/HiddenApiRefinePlugin/blob/main/LICENSE")
     allowUrl("https://opensource.org/licenses/mit-license.php")
     allowUrl("https://developer.android.com/studio/terms.html")
+    allowUrl("https://github.com/intuit/sdp/blob/master/LICENSE")
+    allowUrl("http://www.bouncycastle.org/licence.html")
     allow(SpdxId.MIT)
 
     bundleAndroidAsset = true

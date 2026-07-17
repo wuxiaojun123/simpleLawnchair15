@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+    </data>
+
+    <FrameLayout
+        android:tag="layout/bottomsheet_icon_0"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+        style="?attr/bottomSheetStyle">
+
+        <LinearLayout
+            android:gravity="center"
+            android:orientation="vertical"
+            android:background="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/imgDash"
+                android:layout_width="@dimen/_60sdp"
+                android:layout_height="@dimen/_30sdp"
+                app:srcCompat="@drawable/line" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/txt_title"
+                android:text="Icons"
+                app:layout_constraintTop_toBottomOf="@+id/imgDash"
+                style="@style/TextViewBold" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvIconRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+    </FrameLayout>
+</layout>

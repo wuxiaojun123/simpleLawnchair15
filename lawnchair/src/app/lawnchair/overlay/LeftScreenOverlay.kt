@@ -34,11 +34,10 @@ import com.android.launcher3.R
 import com.android.systemui.plugins.shared.LauncherOverlayManager
 import com.android.systemui.plugins.shared.LauncherOverlayManager.LauncherOverlay
 import com.android.systemui.plugins.shared.LauncherOverlayManager.LauncherOverlayCallbacks
-import com.nice.screebkub.LeftScreenFragment
 import kotlin.math.abs
 
 /**
- * Custom overlay implementation for the left screen (负一屏).
+ * Custom overlay implementation for the left screen (负一�?.
  * This shows a custom LeftScreenView when the user swipes right from the leftmost home screen.
  */
 class LeftScreenOverlay(private val launcher: LawnchairLauncher) :
@@ -172,8 +171,8 @@ class LeftScreenOverlay(private val launcher: LawnchairLauncher) :
     }
 
     private fun attachFragment() {
-        val fragmentManager = launcher.fragmentManager
-        val existing = fragmentManager.findFragmentByTag(FRAGMENT_TAG) as? LeftScreenFragment
+        val fragmentManager = launcher.supportFragmentManager
+        val existing = fragmentManager.findFragmentByTag(FRAGMENT_TAG)
         val isFragmentAttachedToCurrentContainer =
             existing?.isAdded == true &&
                 existing.id == R.id.left_screen_fragment_container &&
@@ -328,15 +327,15 @@ class LeftScreenOverlay(private val launcher: LawnchairLauncher) :
     }
 
     private fun verifyLeftScreenAttachment(reason: String) {
-        val fragment = launcher.fragmentManager.findFragmentByTag(FRAGMENT_TAG) as? LeftScreenFragment
+        val fragment = launcher.supportFragmentManager.findFragmentByTag(FRAGMENT_TAG)
         val attachedToCurrentContainer =
             fragment?.isAdded == true &&
                 fragment.id == R.id.left_screen_fragment_container &&
                 fragment.view?.parent === leftScreenContainer
         debugLog(
-            "verifyLeftScreenAttachment reason=$reason containerExists=${leftScreenContainer != null} containerChildCount=${leftScreenContainer?.childCount} fragmentExists=${fragment != null} fragmentAdded=${fragment?.isAdded} fragmentView=${fragment?.view != null} attachedToCurrent=$attachedToCurrentContainer stateSaved=${launcher.fragmentManager.isStateSaved}",
+            "verifyLeftScreenAttachment reason=$reason containerExists=${leftScreenContainer != null} containerChildCount=${leftScreenContainer?.childCount} fragmentExists=${fragment != null} fragmentAdded=${fragment?.isAdded} fragmentView=${fragment?.view != null} attachedToCurrent=$attachedToCurrentContainer stateSaved=${launcher.supportFragmentManager.isStateSaved}",
         )
-        if (leftScreenContainer != null && !attachedToCurrentContainer && !launcher.fragmentManager.isStateSaved) {
+        if (leftScreenContainer != null && !attachedToCurrentContainer && !launcher.supportFragmentManager.isStateSaved) {
             debugLog("verifyLeftScreenAttachment reattaching fragment reason=$reason")
             attachFragment()
         }

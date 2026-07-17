@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+    </data>
+
+    <FrameLayout
+        android:tag="layout/bottomsheet_pdf_sort_0"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+        style="?attr/bottomSheetStyle">
+
+        <LinearLayout
+            android:gravity="center"
+            android:orientation="vertical"
+            android:background="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/imgDash"
+                android:layout_width="@dimen/_60sdp"
+                android:layout_height="@dimen/_30sdp"
+                app:srcCompat="@drawable/line" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/txt_title"
+                android:text="Sort By"
+                app:layout_constraintTop_toBottomOf="@+id/imgDash"
+                style="@style/TextViewBold" />
+
+            <RadioGroup
+                android:orientation="vertical"
+                android:id="@+id/rGroup"
+                android:paddingLeft="@dimen/_8sdp"
+                android:paddingRight="@dimen/_8sdp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <RadioButton
+                    android:id="@+id/rbAsc"
+                    android:paddingLeft="@dimen/_10sdp"
+                    android:paddingRight="@dimen/_10sdp"
+                    android:paddingBottom="4dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:checked="false"
+                    android:text="A - Z"
+                    style="@style/TextViewRegular" />
+
+                <RadioButton
+                    android:id="@+id/rbDesc"
+                    android:paddingLeft="@dimen/_10sdp"
+                    android:paddingRight="@dimen/_10sdp"
+                    android:paddingBottom="4dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:checked="false"
+                    android:text="Z - A"
+                    style="@style/TextViewRegular" />
+
+                <RadioButton
+                    android:id="@+id/rbLatest"
+                    android:paddingLeft="@dimen/_10sdp"
+                    android:paddingRight="@dimen/_10sdp"
+                    android:paddingBottom="4dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:checked="false"
+                    android:text="Latest"
+                    style="@style/TextViewRegular" />
+
+                <RadioButton
+                    android:id="@+id/rbOld"
+                    android:paddingLeft="@dimen/_10sdp"
+                    android:paddingRight="@dimen/_10sdp"
+                    android:paddingBottom="2dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:checked="false"
+                    android:text="Oldest"
+                    style="@style/TextViewRegular" />
+
+                <RadioButton
+                    android:id="@+id/rbLow"
+                    android:paddingLeft="@dimen/_10sdp"
+                    android:paddingRight="@dimen/_10sdp"
+                    android:paddingBottom="4dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:checked="false"
+                    android:text="Size Low"
+                    style="@style/TextViewRegular" />
+
+                <RadioButton
+                    android:id="@+id/rbHigh"
+                    android:paddingLeft="@dimen/_10sdp"
+                    android:paddingRight="@dimen/_10sdp"
+                    android:paddingBottom="4dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:checked="false"
+                    android:text="Size High"
+                    style="@style/TextViewRegular" />
+            </RadioGroup>
+        </LinearLayout>
+    </FrameLayout>
+</layout>

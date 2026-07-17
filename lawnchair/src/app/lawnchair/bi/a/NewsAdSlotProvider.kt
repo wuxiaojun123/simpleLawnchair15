@@ -9,24 +9,23 @@ import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.LoadAdError
-import com.nice.library_news.AdSlotProvider
 
 /**
  * AdSlotProvider implementation for news feed using AdMob banner ads.
  * Each ad slot gets its own AdView instance that loads independently.
  */
-class NewsAdSlotProvider : AdSlotProvider {
+class NewsAdSlotProvider {
 
     companion object {
         private const val TAG = "adm.news"
         private const val PLACEMENT_ID = "2001"
     }
 
-    override fun isEnabled(): Boolean {
+    fun isEnabled(): Boolean {
         return BuildConfig.AD_ENABLED
     }
 
-    override fun createAdView(parent: ViewGroup): View? {
+    fun createAdView(parent: ViewGroup): View? {
         if (!isEnabled()) return null
 
         val metadata = AdConfigurationManager.createMetadata(PLACEMENT_ID) ?: return null
@@ -53,7 +52,7 @@ class NewsAdSlotProvider : AdSlotProvider {
         return adView
     }
 
-    override fun onAdViewRecycled(view: View) {
+    fun onAdViewRecycled(view: View) {
         // Find and destroy AdView when recycled
         if (view is ViewGroup) {
             for (i in 0 until view.childCount) {

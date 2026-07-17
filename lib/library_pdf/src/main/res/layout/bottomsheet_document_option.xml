@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+    </data>
+
+    <FrameLayout
+        android:tag="layout/bottomsheet_document_option_0"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+        style="?attr/bottomSheetStyle">
+
+        <LinearLayout
+            android:gravity="center"
+            android:orientation="vertical"
+            android:background="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/imgDash"
+                android:layout_width="@dimen/_60sdp"
+                android:layout_height="@dimen/_30sdp"
+                app:srcCompat="@drawable/line" />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp">
+
+                <LinearLayout
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/mcvText"
+                        android:layout_width="wrap_content"
+                        app:cardBackgroundColor="@color/white"
+                        app:cardCornerRadius="@dimen/_20sdp"
+                        app:cardElevation="0dp"
+                        app:contentPadding="@dimen/_2sdp"
+                        app:strokeColor="@color/dividerColor"
+                        app:strokeWidth="@dimen/_1sdp"
+                        style="@style/CardViewCommon2">
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:src="@drawable/text"
+                            style="@style/ImageViewMedium" />
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <TextView
+                        android:layout_marginTop="@dimen/_6sdp"
+                        android:text="@string/text"
+                        style="@style/TextViewSemiBold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/mcvSign"
+                        android:layout_width="wrap_content"
+                        app:cardBackgroundColor="@color/white"
+                        app:cardCornerRadius="@dimen/_20sdp"
+                        app:cardElevation="0dp"
+                        app:contentPadding="@dimen/_2sdp"
+                        app:strokeColor="@color/dividerColor"
+                        app:strokeWidth="@dimen/_1sdp"
+                        style="@style/CardViewCommon2">
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:src="@drawable/signature"
+                            style="@style/ImageViewMedium" />
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <TextView
+                        android:layout_marginTop="@dimen/_6sdp"
+                        android:text="@string/sign"
+                        style="@style/TextViewSemiBold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/mcvDate"
+                        android:layout_width="wrap_content"
+                        app:cardBackgroundColor="@color/white"
+                        app:cardCornerRadius="@dimen/_20sdp"
+                        app:cardElevation="0dp"
+                        app:contentPadding="@dimen/_2sdp"
+                        app:strokeColor="@color/dividerColor"
+                        app:strokeWidth="@dimen/_1sdp"
+                        style="@style/CardViewCommon2">
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:src="@drawable/date"
+                            style="@style/ImageViewMedium" />
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <TextView
+                        android:layout_marginTop="@dimen/_6sdp"
+                        android:text="@string/date"
+                        style="@style/TextViewSemiBold" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_20sdp"
+                android:layout_marginBottom="@dimen/_20sdp">
+
+                <LinearLayout
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/mcvStamps"
+                        android:layout_width="wrap_content"
+                        app:cardBackgroundColor="@color/white"
+                        app:cardCornerRadius="@dimen/_20sdp"
+                        app:cardElevation="0dp"
+                        app:contentPadding="@dimen/_2sdp"
+                        app:strokeColor="@color/dividerColor"
+                        app:strokeWidth="@dimen/_1sdp"
+                        style="@style/CardViewCommon2">
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:src="@drawable/stamps"
+                            style="@style/ImageViewMedium" />
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <TextView
+                        android:layout_marginTop="@dimen/_6sdp"
+                        android:text="@string/stamps"
+                        style="@style/TextViewSemiBold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/mcvIcon"
+                        android:layout_width="wrap_content"
+                        app:cardBackgroundColor="@color/white"
+                        app:cardCornerRadius="@dimen/_20sdp"
+                        app:cardElevation="0dp"
+                        app:contentPadding="@dimen/_2sdp"
+                        app:strokeColor="@color/dividerColor"
+                        app:strokeWidth="@dimen/_1sdp"
+                        style="@style/CardViewCommon2">
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:src="@drawable/icon"
+                            style="@style/ImageViewMedium" />
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <TextView
+                        android:layout_marginTop="@dimen/_6sdp"
+                        android:text="@string/icon"
+                        style="@style/TextViewSemiBold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/mcvPhoto"
+                        android:layout_width="wrap_content"
+                        app:cardBackgroundColor="@color/white"
+                        app:cardCornerRadius="@dimen/_20sdp"
+                        app:cardElevation="0dp"
+                        app:contentPadding="@dimen/_2sdp"
+                        app:strokeColor="@color/dividerColor"
+                        app:strokeWidth="@dimen/_1sdp"
+                        style="@style/CardViewCommon2">
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:src="@drawable/photo"
+                            style="@style/ImageViewMedium" />
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <TextView
+                        android:layout_marginTop="@dimen/_6sdp"
+                        android:text="@string/photo"
+                        style="@style/TextViewSemiBold" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </FrameLayout>
+</layout>

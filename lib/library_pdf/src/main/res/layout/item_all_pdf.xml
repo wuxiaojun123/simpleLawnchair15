@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+    </data>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/card_parent"
+        android:tag="layout/item_all_pdf_0"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="@android:color/transparent"
+        app:cardCornerRadius="0dp"
+        app:cardElevation="0dp"
+        app:cardUseCompatPadding="false">
+
+        <LinearLayout
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:id="@+id/listItemLinearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:baselineAligned="false">
+
+            <LinearLayout
+                android:background="@drawable/shape_oval"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/_2sdp"
+                android:layout_marginStart="16dp">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/fileImageView"
+                    android:padding="@dimen/_9sdp"
+                    android:src="@drawable/pdf"
+                    android:adjustViewBounds="true"
+                    style="@style/ImageViewMedium" />
+            </LinearLayout>
+
+            <RelativeLayout
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp">
+
+                <TextView
+                    android:textSize="@dimen/_12sdp"
+                    android:ellipsize="end"
+                    android:gravity="start|bottom"
+                    android:id="@+id/fileItemTextview"
+                    android:layout_width="match_parent"
+                    android:lines="1"
+                    style="@style/TextViewSemiBold" />
+
+                <TextView
+                    android:textSize="@dimen/_10sdp"
+                    android:textColor="@color/textColor2"
+                    android:gravity="start|center_vertical"
+                    android:id="@+id/dateItemTimeTextView"
+                    android:layout_width="match_parent"
+                    android:layout_marginBottom="@dimen/_5sdp"
+                    android:layout_below="@+id/fileItemTextview"
+                    style="@style/TextViewRegular" />
+
+                <View
+                    android:id="@+id/view1"
+                    android:background="@color/dividerColor"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:layout_marginBottom="@dimen/_8sdp"
+                    android:layout_below="@+id/dateItemTimeTextView" />
+            </RelativeLayout>
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+</layout>

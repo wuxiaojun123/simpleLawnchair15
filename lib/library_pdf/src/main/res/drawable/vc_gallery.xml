@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:height="@dimen/_24sdp" android:width="@dimen/_24sdp" android:drawable="@drawable/second"/>
+    <item android:gravity="center" android:height="@dimen/_10sdp" android:width="@dimen/_10sdp" android:drawable="@drawable/gallery" android:bottom="@dimen/_2sdp"/>
+</layer-list>

@@ -70,7 +70,6 @@ import app.lawnchair.ui.popup.LawnchairShortcut
 import app.lawnchair.util.getThemedIconPacksInstalled
 import app.lawnchair.util.unsafeLazy
 import app.lawnchair.views.LawnchairFloatingSurfaceView
-import com.nice.library_news.NewsPreloadManager
 import com.android.launcher3.AbstractFloatingView
 import com.android.launcher3.BaseActivity
 import com.android.launcher3.BuildConfig
@@ -176,9 +175,6 @@ class LawnchairLauncher : QuickstepLauncher(), LeftScreenHostActions {
     private val userPresentReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             if (intent?.action == Intent.ACTION_USER_PRESENT) {
-                lifecycleScope.launch(Dispatchers.IO) {
-                    NewsPreloadManager.preloadOnFirstUnlockIfNeeded(this@LawnchairLauncher)
-                }
                 logOverlayState("userPresent:beforeEnsure")
                 defaultOverlay.ensureContentAttached()
                 syncRightScreenAvailability()
@@ -453,7 +449,7 @@ class LawnchairLauncher : QuickstepLauncher(), LeftScreenHostActions {
             view.iconView.setBackgroundDrawable(item.icon)
             view.bubbleText.text = item.label
             view.setOnClickListener(popup)
-            view.onLongClickListener = popup
+//            view.onLongClickListener = popup
             popup.mItemMap[view] = item
         }
 

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+    </data>
+
+    <LinearLayout
+        android:gravity="center"
+        android:orientation="vertical"
+        android:tag="layout/item_text_0"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/_8sdp"
+        android:layout_marginStart="@dimen/_12sdp">
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cdText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardBackgroundColor="@android:color/transparent"
+            app:cardElevation="0dp"
+            app:cardUseCompatPadding="true">
+
+            <LinearLayout
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:id="@+id/listItemLinearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:baselineAligned="false">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:ellipsize="end"
+                        android:id="@+id/ItemTextview"
+                        android:layout_width="match_parent"
+                        android:lines="1"
+                        android:layout_centerVertical="true"
+                        android:layout_toStartOf="@+id/mcvTextOption"
+                        style="@style/TextViewBold" />
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/mcvTextOption"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="@dimen/_8sdp"
+                        android:layout_marginEnd="@dimen/_4sdp"
+                        android:layout_alignParentEnd="true"
+                        app:cardBackgroundColor="@android:color/transparent"
+                        app:cardCornerRadius="@dimen/_14sdp"
+                        app:cardElevation="0dp"
+                        app:cardPreventCornerOverlap="false">
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:src="@drawable/tree_dot_menu"
+                            style="@style/ImageViewSmall" />
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <View
+                        android:id="@+id/view1"
+                        android:background="@color/dividerColor"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:layout_below="@+id/mcvTextOption"
+                        android:layout_marginEnd="@dimen/_15sdp" />
+                </RelativeLayout>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+    </LinearLayout>
+</layout>

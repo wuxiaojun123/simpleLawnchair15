@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+    </data>
+
+    <FrameLayout
+        android:tag="layout/bottomsheet_pdf_oprtion_0"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+        style="?attr/bottomSheetStyle">
+
+        <LinearLayout
+            android:gravity="center"
+            android:orientation="vertical"
+            android:background="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/imgDash"
+                android:layout_width="@dimen/_60sdp"
+                android:layout_height="@dimen/_30sdp"
+                app:srcCompat="@drawable/line" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_parent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="@android:color/transparent"
+                app:cardElevation="0dp"
+                app:cardUseCompatPadding="true">
+
+                <LinearLayout
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:id="@+id/listItemLinearLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:baselineAligned="false">
+
+                    <LinearLayout
+                        android:background="@drawable/shape_oval"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp">
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:id="@+id/fileImageView"
+                            android:padding="@dimen/_9sdp"
+                            android:src="@drawable/pdf"
+                            android:adjustViewBounds="true"
+                            style="@style/ImageViewMedium" />
+                    </LinearLayout>
+
+                    <RelativeLayout
+                        android:gravity="center"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp">
+
+                        <TextView
+                            android:textSize="@dimen/_12sdp"
+                            android:ellipsize="end"
+                            android:gravity="start|bottom"
+                            android:id="@+id/fileItemTextview"
+                            android:layout_width="match_parent"
+                            android:lines="1"
+                            style="@style/TextViewSemiBold" />
+
+                        <TextView
+                            android:textSize="@dimen/_10sdp"
+                            android:textColor="@color/textColor2"
+                            android:gravity="start|center_vertical"
+                            android:id="@+id/dateItemTimeTextView"
+                            android:layout_width="match_parent"
+                            android:layout_marginBottom="@dimen/_5sdp"
+                            android:layout_below="@+id/fileItemTextview"
+                            style="@style/TextViewRegular" />
+                    </RelativeLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <View
+                android:background="@color/dividerColor"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:layout_marginBottom="@dimen/_5sdp" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/mcvopen"
+                app:contentPadding="@dimen/_8sdp"
+                style="@style/CardViewCommon2">
+
+                <LinearLayout
+                    android:gravity="start|center_vertical"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:padding="@dimen/_7sdp"
+                        android:src="@drawable/open"
+                        style="@style/ImageViewSmall" />
+
+                    <TextView
+                        android:text="Open"
+                        android:layout_marginStart="@dimen/_10sdp"
+                        style="@style/TextViewSemiBold" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/mcvEdit"
+                app:contentPadding="@dimen/_8sdp"
+                style="@style/CardViewCommon2">
+
+                <LinearLayout
+                    android:gravity="start|center_vertical"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:padding="@dimen/_7sdp"
+                        android:src="@drawable/edit"
+                        app:tint="@color/pdfIconTint"
+                        style="@style/ImageViewSmall" />
+
+                    <TextView
+                        android:text="Edit"
+                        android:layout_marginStart="@dimen/_10sdp"
+                        style="@style/TextViewSemiBold" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/mcvRename"
+                app:contentPadding="@dimen/_8sdp"
+                style="@style/CardViewCommon2">
+
+                <LinearLayout
+                    android:gravity="start|center_vertical"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:padding="@dimen/_7sdp"
+                        android:src="@drawable/text"
+                        app:tint="@color/pdfIconTint"
+                        style="@style/ImageViewSmall" />
+
+                    <TextView
+                        android:text="Rename"
+                        android:layout_marginStart="@dimen/_10sdp"
+                        style="@style/TextViewSemiBold" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/mcvShare"
+                app:contentPadding="@dimen/_8sdp"
+                style="@style/CardViewCommon2">
+
+                <LinearLayout
+                    android:gravity="start|center_vertical"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:padding="@dimen/_7sdp"
+                        android:src="@drawable/share_pdf"
+                        style="@style/ImageViewSmall" />
+
+                    <TextView
+                        android:text="Share"
+                        android:layout_marginStart="@dimen/_10sdp"
+                        style="@style/TextViewSemiBold" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/mcvDelete"
+                app:contentPadding="@dimen/_8sdp"
+                style="@style/CardViewCommon2">
+
+                <LinearLayout
+                    android:gravity="start|center_vertical"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:padding="@dimen/_7sdp"
+                        android:src="@drawable/delete"
+                        style="@style/ImageViewSmall" />
+
+                    <TextView
+                        android:textColor="@color/textColor3"
+                        android:text="Delete"
+                        android:layout_marginStart="@dimen/_10sdp"
+                        style="@style/TextViewSemiBold" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+        </LinearLayout>
+    </FrameLayout>
+</layout>

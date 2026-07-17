@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+    </data>
+
+    <FrameLayout
+        android:tag="layout/bottomsheet_menu_0"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+        style="?attr/bottomSheetStyle">
+
+        <LinearLayout
+            android:gravity="center"
+            android:orientation="vertical"
+            android:background="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/imgDash"
+                android:layout_width="@dimen/_60sdp"
+                android:layout_height="@dimen/_30sdp"
+                app:srcCompat="@drawable/line" />
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/_10sdp">
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_marginLeft="@dimen/_10sdp"
+                        android:layout_marginRight="@dimen/_10sdp"
+                        android:layout_marginBottom="@dimen/_10sdp"
+                        app:cardBackgroundColor="@color/menu_cardBg"
+                        app:cardElevation="0dp"
+                        app:contentPaddingBottom="@dimen/_2sdp"
+                        app:contentPaddingTop="@dimen/_2sdp"
+                        style="@style/CardViewCommon">
+
+                        <LinearLayout
+                            android:orientation="vertical"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <LinearLayout
+                                android:orientation="horizontal"
+                                android:id="@+id/llSignatures"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/_8sdp"
+                                android:layout_marginBottom="@dimen/_8sdp">
+
+                                <ImageView
+                                    android:padding="@dimen/_6sdp"
+                                    android:src="@drawable/dw_signature"
+                                    style="@style/ImageViewSmall" />
+
+                                <TextView
+                                    android:layout_gravity="center"
+                                    android:layout_width="0dp"
+                                    android:layout_marginLeft="@dimen/_10sdp"
+                                    android:layout_marginRight="@dimen/_10sdp"
+                                    android:text="My Signatures"
+                                    android:layout_weight="1"
+                                    style="@style/TextViewSemiBold" />
+
+                                <ImageView
+                                    android:layout_gravity="center"
+                                    android:src="@drawable/dw_right"
+                                    style="@style/ImageViewSmall" />
+                            </LinearLayout>
+
+
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_marginLeft="@dimen/_10sdp"
+                        android:layout_marginRight="@dimen/_10sdp"
+                        app:cardBackgroundColor="@color/menu_cardBg"
+                        app:cardElevation="0dp"
+                        style="@style/CardViewCommon">
+
+                        <LinearLayout
+                            android:orientation="vertical"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <LinearLayout
+                                android:orientation="horizontal"
+                                android:id="@+id/llDrawerShare"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/_8sdp"
+                                android:layout_marginBottom="@dimen/_8sdp">
+
+                                <ImageView
+                                    android:padding="@dimen/_6sdp"
+                                    android:src="@drawable/dw_share"
+                                    style="@style/ImageViewSmall" />
+
+                                <TextView
+                                    android:layout_gravity="center"
+                                    android:layout_width="0dp"
+                                    android:layout_marginLeft="@dimen/_10sdp"
+                                    android:layout_marginRight="@dimen/_10sdp"
+                                    android:text="Share With Friends"
+                                    android:layout_weight="1"
+                                    style="@style/TextViewSemiBold" />
+
+                                <ImageView
+                                    android:layout_gravity="center"
+                                    android:src="@drawable/dw_right"
+                                    style="@style/ImageViewSmall" />
+                            </LinearLayout>
+
+                            <!--<LinearLayout
+                                android:orientation="horizontal"
+                                android:id="@+id/llDrawerRate"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/_8sdp"
+                                android:layout_marginBottom="@dimen/_8sdp">
+
+                                <ImageView
+                                    android:padding="@dimen/_6sdp"
+                                    android:src="@drawable/dw_rating"
+                                    style="@style/ImageViewSmall" />
+
+                                <TextView
+                                    android:layout_gravity="center"
+                                    android:layout_width="0dp"
+                                    android:layout_marginLeft="@dimen/_10sdp"
+                                    android:layout_marginRight="@dimen/_10sdp"
+                                    android:text="Rate us"
+                                    android:layout_weight="1"
+                                    style="@style/TextViewSemiBold" />
+
+                                <ImageView
+                                    android:layout_gravity="center"
+                                    android:src="@drawable/dw_right"
+                                    style="@style/ImageViewSmall" />
+                            </LinearLayout>-->
+
+
+
+
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </FrameLayout>
+</layout>

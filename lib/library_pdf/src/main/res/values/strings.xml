@@ -1,0 +1,63 @@
+<resources>
+
+
+    <string name="app_name">PDF Reader Sign</string>
+    <string name="splash_subtitle">PDF signing made simple</string>
+
+    <string name="Backup_and_Restore_">Backup and Restore</string>
+    <string name="One_time_purchase">One Time Purchase</string>
+
+    <string name="accept_term">ACCEPT AND CONTINUE</string>
+    <string name="ad_setting_desc">Change Your Ad Policy</string>
+    <string name="ad_setting_title">Ad Setting</string>
+    <string name="app_description1">We care about your privacy and data security. We keep this app free by showing ads.</string>
+    <string name="app_description2">Can we continue to use your data to tailor ads for you?</string>
+    <string name="app_description3">You can change your choice anytime for App Name in the app settings. Our partners will collect data and use a unique identifier on your device to show you ads.</string>
+    <string name="benefits">Benefits</string>
+
+
+    <string name="copy_toast_msg">Link copied to clipboard</string>
+    <string name="crop_image_activity_no_permissions">Cancelling, required permissions are not granted</string>
+    <string name="crop_image_activity_title" />
+    <string name="crop_image_menu_crop">Crop</string>
+    <string name="crop_image_menu_flip">Flip</string>
+    <string name="crop_image_menu_flip_horizontally">Flip horizontally</string>
+    <string name="crop_image_menu_flip_vertically">Flip vertically</string>
+    <string name="crop_image_menu_rotate_left">Rotate counter clockwise</string>
+    <string name="crop_image_menu_rotate_right">Rotate</string>
+    <string name="date">Date</string>
+    <string name="delete">Delete</string>
+    <string name="edit">Edit</string>
+    <string name="enjoy_pro_moods">Enjoy PRO Moods</string>
+    <string name="exit">Exit</string>
+    <string name="free">Free</string>
+    <string name="icon">Icon</string>
+    <string name="intro_text">Sign your PDF Documents easily.\nAdd photo on PDF from camera &amp; Gallery.\nWrite text and place it anywhere.\nStamp out your document with just one click.\n</string>
+    <string name="non_personalized">No, see ads that are less relevant</string>
+    <string name="pdf_signature">Fill &amp; Sign PDF Document</string>
+    <string name="personalized">Yes, continue to see relevant ads</string>
+    <string name="photo">Photo</string>
+    <string name="pick_image_intent_chooser_title">Select source</string>
+    <string name="premium">Premium</string>
+    <string name="privacy_policy">Privacy Policy</string>
+    <string name="pro">Premium Version</string>
+    <string name="rating_dialog_cancel">Cancel</string>
+    <string name="rating_dialog_experience">Support us by give 5 star\nand write your review</string>
+    <string name="rating_dialog_feedback_title">Feedback</string>
+    <string name="rating_dialog_maybe_later">Maybe later</string>
+    <string name="rating_dialog_never">Never</string>
+    <string name="rating_dialog_submit">Send</string>
+    <string name="rating_dialog_suggestions">Suggest us what went wrong and we\'ll work on it!</string>
+    <string name="remove_all_ads">Remove All Ads</string>
+    <string name="search">Search</string>
+    <string name="search_menu_title">Search</string>
+    <string name="sign">Sign</string>
+    <string name="stamps">Stamps</string>
+    <string name="start">Start</string>
+    <string name="terms">This app is governed by Appworld Infotech Terms of Service. By continuing to use this app you represent that you have read and accept the Terms of Service, Privacy Policy and Permission Disclosure.</string>
+    <string name="termsOfService">Terms Of Service</string>
+    <string name="text">Text</string>
+    <string name="use_permission">Files and Media Permission</string>
+    <string name="use_permission_msg">This app needs the activation of an manage external storage permission to can work. Please tap on Grant Permission then switch on and active the permission.</string>
+    <string name="user_agreement">User Agreement</string>
+</resources>

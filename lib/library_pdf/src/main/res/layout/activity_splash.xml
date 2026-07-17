@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:paddingStart="@dimen/_24sdp"
+        android:paddingEnd="@dimen/_24sdp">
+
+        <LinearLayout
+            android:id="@+id/splashContent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/imgSignature"
+                android:layout_width="@dimen/_72sdp"
+                android:layout_height="@dimen/_72sdp"
+                android:contentDescription="@string/app_name"
+                android:padding="@dimen/_14sdp"
+                android:src="@drawable/icon200" />
+
+            <TextView
+                android:id="@+id/textView"
+                style="@style/TextViewBold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_18sdp"
+                android:text="@string/app_name"
+                android:textColor="@color/textColor1"
+                android:textSize="@dimen/_22sdp" />
+
+            <TextView
+                android:id="@+id/txtSubtitle"
+                style="@style/TextViewRegular"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_6sdp"
+                android:gravity="center"
+                android:text="@string/splash_subtitle"
+                android:textColor="@color/textColor2"
+                android:textSize="@dimen/_12sdp" />
+
+            <ProgressBar
+                android:id="@+id/progressSplash"
+                style="?android:attr/progressBarStyleSmall"
+                android:layout_width="@dimen/_28sdp"
+                android:layout_height="@dimen/_28sdp"
+                android:layout_marginTop="@dimen/_24sdp"
+                android:indeterminate="true"
+                android:indeterminateTint="@color/textColor3" />
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

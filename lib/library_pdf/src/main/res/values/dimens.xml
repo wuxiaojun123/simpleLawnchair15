@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="fab_margin">16dp</dimen>
+
+    <dimen name="ctx_menu_height">40dp</dimen>
+    <dimen name="ctx_menu_item_width">40dp</dimen>
+    <dimen name="native_grid_height">255dp</dimen>
+    <dimen name="native_large_height">250dp</dimen>
+    <dimen name="native_medium_height">130dp</dimen>
+    <dimen name="native_rect_height">250dp</dimen>
+    <dimen name="nav_header_height">160dp</dimen>
+    <dimen name="padding10dp">10dp</dimen>
+    <dimen name="padding2dp">2dp</dimen>
+    <dimen name="padding4dp">6dp</dimen>
+    <dimen name="padding5dp">5dp</dimen>
+    <dimen name="pagenumber_left_margin">15dp</dimen>
+    <dimen name="pagenumber_overlay_margin_top">10dp</dimen>
+    <dimen name="pagenumber_right_margin">15dp</dimen>
+    <dimen name="pagenumber_top_bottom_margin">6dp</dimen>
+    <dimen name="sign_button_height">55dp</dimen>
+    <dimen name="sign_field_default_height">60dp</dimen>
+    <dimen name="sign_field_max_height">170dp</dimen>
+    <dimen name="sign_field_min_height">17dp</dimen>
+    <dimen name="sign_field_step_size">0dp</dimen>
+    <dimen name="sign_left_offset">24dp</dimen>
+    <dimen name="sign_menu_width">210dp</dimen>
+    <dimen name="sign_right_offset">16dp</dimen>
+    <dimen name="sign_top_offset">18dp</dimen>
+    <dimen name="textViewTextSize">14sp</dimen>
+
+    <dimen name="element_horizontal_padding">0dp</dimen>
+    <dimen name="element_min_width">25dp</dimen>
+    <dimen name="element_vertical_padding">0dp</dimen>
+    <dimen name="menu_offset_x">10dp</dimen>
+    <dimen name="menu_offset_y">25dp</dimen>
+
+</resources>

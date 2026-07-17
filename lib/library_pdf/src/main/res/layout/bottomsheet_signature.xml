@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+    </data>
+
+    <FrameLayout
+        android:tag="layout/bottomsheet_signature_0"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+        style="?attr/bottomSheetStyle">
+
+        <LinearLayout
+            android:gravity="center"
+            android:orientation="vertical"
+            android:background="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/imgDash"
+                android:layout_width="@dimen/_60sdp"
+                android:layout_height="@dimen/_30sdp"
+                app:srcCompat="@drawable/line" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/txt_title"
+                android:text="Signature"
+                app:layout_constraintTop_toBottomOf="@+id/imgDash"
+                style="@style/TextViewBold" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/mcvSignature_collection"
+                app:contentPadding="@dimen/_8sdp"
+                style="@style/CardViewCommon2">
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:padding="0dp"
+                        android:src="@drawable/vc_signature"
+                        style="@style/ImageViewMedium" />
+
+                    <TextView
+                        android:layout_marginTop="@dimen/_2sdp"
+                        android:text="From Signature Collection"
+                        android:layout_marginStart="@dimen/_10sdp"
+                        style="@style/TextViewRegular" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <View
+                android:background="@color/dividerColor"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="@dimen/_10sdp"
+                android:layout_marginRight="@dimen/_10sdp"
+                android:layout_marginBottom="@dimen/_6sdp" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/mcvImage_library"
+                app:contentPadding="@dimen/_8sdp"
+                style="@style/CardViewCommon2">
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:padding="0dp"
+                        android:src="@drawable/vc_gallery"
+                        style="@style/ImageViewMedium" />
+
+                    <TextView
+                        android:layout_marginTop="@dimen/_2sdp"
+                        android:text="From the Image Library"
+                        android:layout_marginStart="@dimen/_10sdp"
+                        style="@style/TextViewRegular" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+        </LinearLayout>
+    </FrameLayout>
+</layout>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:height="@dimen/_24sdp" android:width="@dimen/_24sdp">
+        <shape android:shape="oval">
+            <solid android:color="#f6f4f5"/>
+            <corners android:radius="@dimen/_5sdp"/>
+        </shape>
+    </item>
+    <item android:gravity="center" android:height="@dimen/_12sdp" android:width="@dimen/_12sdp" android:drawable="@drawable/ic_crown"/>
+</layer-list>

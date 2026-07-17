@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+
+    <application
+
+        >
+
+        <activity
+            android:theme="@style/Theme.PdfSignature"
+            android:name="com.simplepdf.pdfeditor.Activity.SplashActivity"
+            android:exported="true"
+            android:screenOrientation="portrait">
+            <!--<intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>-->
+            <intent-filter>
+                <action android:name="android.intent.action.SEND"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:mimeType="application/vnd.ms-word"/>
+                <data android:mimeType="application/vnd.openxmlformats-officedocument.wordprocessingml.document"/>
+                <data android:mimeType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"/>
+                <data android:mimeType="application/vnd.openxmlformats-officedocument.presentationml.presentation"/>
+                <data android:mimeType="application/vnd.ms-word.document.macroenabled.12"/>
+                <data android:mimeType="application/vnd.ms-word.document.macroEnabled.12"/>
+                <data android:mimeType="application/msword"/>
+                <data android:mimeType="application/vnd.ms-word.template.macroenabled.12"/>
+                <data android:mimeType="application/vnd.ms-word.template.macroEnabled.12"/>
+                <data android:mimeType="application/vnd.openxmlformats-officedocument.wordprocessingml.template"/>
+                <data android:mimeType="application/vnd.ms-excel.sheet.macroenabled.12"/>
+                <data android:mimeType="application/vnd.ms-excel.sheet.macroEnabled.12"/>
+                <data android:mimeType="application/vnd.ms-excel"/>
+                <data android:mimeType="application/vnd.ms-excel.addin.macroenabled.12"/>
+                <data android:mimeType="application/vnd.ms-excel.addin.macroEnabled.12"/>
+                <data android:mimeType="application/vnd.ms-excel.template.macroenabled.12"/>
+                <data android:mimeType="application/vnd.ms-excel.template.macroEnabled.12"/>
+                <data android:mimeType="application/vnd.openxmlformats-officedocument.spreadsheetml.template"/>
+                <data android:mimeType="application/vnd.ms-powerpoint"/>
+                <data android:mimeType="application/vnd.openxmlformats-officedocument.presentationml.template"/>
+                <data android:mimeType="application/vnd.ms-powerpoint.presentation.macroenabled.12"/>
+                <data android:mimeType="application/vnd.ms-powerpoint.presentation.macroEnabled.12"/>
+                <data android:mimeType="application/vnd.openxmlformats-officedocument.presentationml.slideshow"/>
+                <data android:mimeType="application/vnd.ms-powerpoint.slideshow.macroenabled.12"/>
+                <data android:mimeType="application/vnd.ms-powerpoint.slideshow.macroEnabled.12"/>
+                <data android:mimeType="application/vnd.ms-powerpoint.template.macroEnabled.12"/>
+                <data android:mimeType="application/vnd.ms-powerpoint.template.macroenabled.12"/>
+                <data android:mimeType="text/csv"/>
+                <data android:mimeType="text/comma-separated-values"/>
+                <data android:mimeType="text/plain" />
+                <data android:mimeType="application/octet-stream" />
+            </intent-filter>
+        </activity>
+
+
+        <activity
+            android:name="com.simplepdf.pdfeditor.Activity.ChoosePdfActivity"
+            android:exported="false"
+            android:theme="@style/Theme.PdfSignature"
+            />
+        <activity
+            android:name="com.simplepdf.pdfeditor.Activity.StampsActivity"
+            android:exported="false"
+            android:theme="@style/Theme.PdfSignature"
+            android:screenOrientation="portrait" />
+        <activity
+            android:theme="@style/Theme.PdfSignature"
+            android:name="com.simplepdf.pdfeditor.Activity.DateFormatterActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:theme="@style/Theme.PdfSignature"
+            android:name="com.simplepdf.pdfeditor.Activity.IntroActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:theme="@style/Theme.PdfSignature"
+            android:name="com.simplepdf.pdfeditor.Activity.AddTextActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:theme="@style/Theme.PdfSignature"
+            android:name="com.simplepdf.pdfeditor.Activity.MainActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:theme="@style/Theme.PdfSignature"
+            android:name="com.simplepdf.pdfeditor.Signature.FreeHandActivity"
+            android:label="Draw Signature"
+            android:screenOrientation="landscape" />
+        <activity
+            android:theme="@style/Theme.PdfSignature"
+            android:name="com.simplepdf.pdfeditor.Signature.colorPickerActivity"
+            android:exported="false"
+            android:screenOrientation="landscape" />
+        <activity
+            android:theme="@style/Theme.PdfSignature"
+            android:name="com.simplepdf.pdfeditor.Signature.SignatureActivity"
+            android:label="Signatures"
+            android:screenOrientation="portrait" />
+        <activity
+            android:theme="@style/Theme.PdfSignature"
+            android:name="com.simplepdf.pdfeditor.Activity.DigitalSignatureActivity"
+            android:label=""
+            android:screenOrientation="portrait" />
+
+
+        <provider
+            android:name="com.simplepdf.pdfeditor.PdfInitProvider"
+            android:authorities="${applicationId}.pdfeditor.init"
+            android:exported="false"
+            android:initOrder="100" />
+
+        <provider
+            android:name="com.simplepdf.pdfeditor.PdfFileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
+    </application>
+
+</manifest>

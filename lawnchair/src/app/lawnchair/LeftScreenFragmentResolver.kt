@@ -1,37 +1,18 @@
 package app.lawnchair
 
-import android.app.Fragment
-import app.lawnchair.bi.a.NewsAdSlotProvider
-import com.android.launcher3.BuildConfig
-import com.nice.library_news.NewsLeftScreenFragment
-import com.nice.screebkub.ILeftScreenService
+import androidx.fragment.app.Fragment
 import com.nice.screebkub.OverlayStateFileLogger
-import com.nice.screebkub.Router
-import com.nice.screebkub.LeftScreenFragment
+import com.simplepdf.pdfeditor.Fragment.HomeFragment
 
 object LeftScreenFragmentResolver {
     private const val TAG = "LeftScreenResolver"
 
     fun createFragment(launcher: LawnchairLauncher): Fragment {
-        val service = Router.getSrv(ILeftScreenService::class.java)
-        if (service == null) {
-            OverlayStateFileLogger.log(launcher, TAG, "getSrv returned null, fallback to default")
-        }
-
-        val fragment = runCatching {
-            service?.getFragment()
-        }.onFailure {
-            OverlayStateFileLogger.log(launcher, TAG, "getFragment failed error=${it.javaClass.simpleName}")
-        }.getOrNull()
-
-        val resolved = fragment ?: NewsLeftScreenFragment()
-        if (resolved is NewsLeftScreenFragment && BuildConfig.AD_ENABLED) {
-            resolved.adSlotProvider = NewsAdSlotProvider()
-        }
+        val resolved = HomeFragment()
         OverlayStateFileLogger.log(
             launcher,
             TAG,
-            "createFragment serviceExists=${service != null} resolved=${resolved.javaClass.name}",
+            "createFragment resolved=${resolved.javaClass.name}",
         )
         return resolved
     }

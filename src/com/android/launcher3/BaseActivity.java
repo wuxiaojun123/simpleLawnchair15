@@ -33,7 +33,7 @@ import android.os.Looper;
 import android.util.Log;
 import android.window.OnBackInvokedDispatcher;
 
-import androidx.activity.ComponentActivity;
+import androidx.fragment.app.FragmentActivity;
 import androidx.annotation.IntDef;
 
 import com.android.launcher3.DeviceProfile.OnDeviceProfileChangeListener;
@@ -55,7 +55,7 @@ import java.util.StringJoiner;
 /**
  * Launcher BaseActivity
  */
-public abstract class BaseActivity extends ComponentActivity implements ActivityContext {
+public abstract class BaseActivity extends FragmentActivity implements ActivityContext {
 
     private static final String TAG = "BaseActivity";
     static final boolean DEBUG = false;

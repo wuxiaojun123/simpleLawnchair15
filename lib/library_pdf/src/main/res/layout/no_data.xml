@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:orientation="vertical"
+        android:id="@+id/nodata"
+        android:tag="layout/no_data_0"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imgNoData"
+            android:layout_width="@dimen/_120sdp"
+            android:layout_height="@dimen/_120sdp"
+            android:src="@drawable/nodata"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
+            android:gravity="center"
+            android:id="@+id/txtNoData"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:text="No PDF Available"
+            app:layout_constraintBottom_toTopOf="@+id/txtDescription"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imgNoData"
+            style="@style/TextViewBold" />
+
+        <TextView
+            android:textAppearance="@style/TextAppearance.Material3.BodySmall"
+            android:textSize="@dimen/_12sdp"
+            android:textColor="@color/textColor2"
+            android:gravity="center"
+            android:id="@+id/txtDescription"
+            android:text="Create a new PDF"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txtNoData"
+            style="@style/TextViewRegular" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
