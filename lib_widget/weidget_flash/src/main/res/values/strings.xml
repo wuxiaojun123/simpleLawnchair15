@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="widget_flashlight_title">手电筒</string>
+    <string name="widget_flashlight_description">点击打开或关闭手电筒</string>
+    <string name="widget_flashlight_on">已开启</string>
+    <string name="widget_flashlight_off">已关闭</string>
+    <string name="widget_flashlight_permission_required">需要相机权限才能使用手电筒</string>
+    <string name="widget_flashlight_toggle_failed">无法切换手电筒</string>
+</resources>
