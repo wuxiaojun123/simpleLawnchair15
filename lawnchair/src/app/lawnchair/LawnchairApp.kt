@@ -54,6 +54,7 @@ import com.android.launcher3.R
 import com.android.launcher3.Utilities
 import com.android.quickstep.RecentsActivity
 import com.android.systemui.shared.system.QuickStepContract
+import com.simplepdf.pdfeditor.splash.PdfSplashInstaller
 import java.io.File
 
 class LawnchairApp : Application() {
@@ -67,6 +68,7 @@ class LawnchairApp : Application() {
     override fun onCreate() {
         super.onCreate()
         instance = this
+        PdfSplashInstaller.install()
         DRouter.init(this)
         QuickStepContract.sRecentsDisabled = !recentsEnabled
         Flowerpot.Manager.getInstance(this)

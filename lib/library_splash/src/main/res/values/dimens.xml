@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <dimen name="library_splash_icon_size">96dp</dimen>
+    <dimen name="library_splash_title_top_margin">16dp</dimen>
+</resources>

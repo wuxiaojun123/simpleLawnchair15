@@ -49,6 +49,21 @@
         attributes and intent filters the same
         -->
         <activity
+            android:name="com.nice.library_splash.SplashActivity"
+            android:exported="true"
+            android:screenOrientation="unspecified"
+            android:taskAffinity=""
+            android:theme="@style/Theme.LibrarySplash">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <meta-data
+                android:name="com.nice.library_splash.TARGET_ACTIVITY"
+                android:value="app.lawnchair.LawnchairLauncher" />
+        </activity>
+
+        <activity
             android:name="app.lawnchair.LawnchairLauncher"
             android:launchMode="singleTask"
             android:clearTaskOnLaunch="true"
@@ -68,7 +83,6 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.MONKEY"/>
                 <category android:name="android.intent.category.LAUNCHER_APP" />
-                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
             <meta-data
                 android:name="com.android.launcher3.grid.control"
