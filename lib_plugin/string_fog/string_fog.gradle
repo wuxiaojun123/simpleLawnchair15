@@ -1,7 +1,12 @@
 apply plugin: 'stringfog'
 
+def isStringFogEnabled = providers.gradleProperty('enableStringFog')
+        .map { it.toBoolean() }
+        .orElse(false)
+        .get()
+
 stringfog {
-    enable true
+    enable isStringFogEnabled
     debug false
     implementation 'com.github.megatronking.stringfog.xor.StringFogImpl'
     fogPackages = [

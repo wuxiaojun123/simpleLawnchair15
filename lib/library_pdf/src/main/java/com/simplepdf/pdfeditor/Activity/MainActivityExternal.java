@@ -2,7 +2,7 @@ package com.simplepdf.pdfeditor.Activity;
 
 import androidx.activity.result.ActivityResult;
 
-import com.simplepdf.pdfeditor.Fragment.HomeFragment;
+import com.simplepdf.pdfeditor.fragment.HomeFragment;
 import com.simplepdf.pdfeditor.util.BetterActivityResult;
 
 

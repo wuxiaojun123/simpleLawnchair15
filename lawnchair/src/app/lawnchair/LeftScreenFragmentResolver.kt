@@ -2,7 +2,7 @@ package app.lawnchair
 
 import androidx.fragment.app.Fragment
 import com.nice.screebkub.OverlayStateFileLogger
-import com.simplepdf.pdfeditor.Fragment.HomeFragment
+import com.simplepdf.pdfeditor.fragment.HomeFragment
 
 object LeftScreenFragmentResolver {
     private const val TAG = "LeftScreenResolver"

@@ -1,4 +1,4 @@
-package com.simplepdf.pdfeditor.Fragment;
+package com.simplepdf.pdfeditor.fragment;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -47,7 +47,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.simplepdf.pdfeditor.Activity.ChoosePdfActivity;
 import com.simplepdf.pdfeditor.Activity.DigitalSignatureActivity;
-import com.simplepdf.pdfeditor.Activity.MainActivityExternal;
 import com.simplepdf.pdfeditor.Activity.MainActivityExternal1;
 import com.simplepdf.pdfeditor.Activity.MainActivityExternalSynthetic2;
 import com.simplepdf.pdfeditor.CallbackListener.RecyclerItemClick;
@@ -71,7 +70,6 @@ import com.simplepdf.pdfeditor.util.ScaleImageMatrix;
 import com.tom_roush.pdfbox.pdmodel.PDDocument;
 import com.tom_roush.pdfbox.pdmodel.PDPage;
 import com.tom_roush.pdfbox.pdmodel.PDPageContentStream;
-import com.tom_roush.pdfbox.pdmodel.common.PDPageLabelRange;
 import com.tom_roush.pdfbox.pdmodel.common.PDRectangle;
 import com.tom_roush.pdfbox.pdmodel.graphics.image.JPEGFactory;
 import com.tom_roush.pdfbox.pdmodel.graphics.image.PDImageXObject;

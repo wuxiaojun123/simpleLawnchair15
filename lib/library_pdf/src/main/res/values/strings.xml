@@ -3,6 +3,10 @@
 
     <string name="app_name">PDF Reader Sign</string>
     <string name="splash_subtitle">PDF signing made simple</string>
+    <string name="welcome_to_pdf_reader">welcome to pdf reader</string>
+    <string name="set_default_launcher_message">Set this app as your default home screen?</string>
+    <string name="set_default_launcher">Set as home</string>
+    <string name="skip_default_launcher">Not now</string>
 
     <string name="Backup_and_Restore_">Backup and Restore</string>
     <string name="One_time_purchase">One Time Purchase</string>

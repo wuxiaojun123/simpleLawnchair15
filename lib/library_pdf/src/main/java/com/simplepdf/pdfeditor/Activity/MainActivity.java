@@ -1,6 +1,6 @@
 package com.simplepdf.pdfeditor.Activity;
 
-import com.simplepdf.pdfeditor.Fragment.HomeFragment;
+import com.simplepdf.pdfeditor.fragment.HomeFragment;
 import com.simplepdf.pdfeditor.R;
 
 public class MainActivity extends BaseActivity {
