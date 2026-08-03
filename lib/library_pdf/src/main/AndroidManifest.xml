@@ -70,6 +70,12 @@
 
 
         <activity
+            android:name="com.simplepdf.pdfeditor.Activity.PdfLauncherChoiceActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.PdfSignature" />
+
+        <activity
             android:name="com.simplepdf.pdfeditor.Activity.ChoosePdfActivity"
             android:exported="false"
             android:theme="@style/Theme.PdfSignature"

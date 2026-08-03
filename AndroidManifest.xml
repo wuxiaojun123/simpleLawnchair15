@@ -56,12 +56,6 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            <meta-data
-                android:name="com.nice.library_splash.TARGET_ACTIVITY"
-                android:value="app.lawnchair.LawnchairLauncher" />
-            <meta-data
-                android:name="com.nice.library_splash.FALLBACK_ACTIVITY"
-                android:value="com.simplepdf.pdfeditor.Activity.MainActivity" />
         </activity>
 
         <activity

@@ -7,6 +7,7 @@
     <string name="set_default_launcher_message">Set this app as your default home screen?</string>
     <string name="set_default_launcher">Set as home</string>
     <string name="skip_default_launcher">Not now</string>
+    <string name="home_settings_unavailable">Unable to open home settings</string>
 
     <string name="Backup_and_Restore_">Backup and Restore</string>
     <string name="One_time_purchase">One Time Purchase</string>

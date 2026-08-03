@@ -8,37 +8,29 @@
     android:paddingStart="32dp"
     android:paddingEnd="32dp">
 
+    <ImageView
+        android:id="@+id/imgSplashIcon"
+        android:layout_width="96dp"
+        android:layout_height="96dp"
+        android:contentDescription="@string/app_name"
+        android:src="@drawable/icon200" />
+
     <TextView
-        android:id="@+id/tvWelcome"
+        android:id="@+id/tvAppName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:gravity="center"
-        android:text="@string/welcome_to_pdf_reader"
+        android:text="@string/app_name"
         android:textColor="@color/textColor1"
         android:textSize="24sp" />
 
-    <TextView
-        android:id="@+id/tvDefaultLauncherMessage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:gravity="center"
-        android:text="@string/set_default_launcher_message"
-        android:textColor="@color/textColor2"
-        android:textSize="16sp" />
-
-    <Button
-        android:id="@+id/buttonSetDefaultLauncher"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
+    <ProgressBar
+        android:id="@+id/progressSplash"
+        style="?android:attr/progressBarStyleSmall"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
         android:layout_marginTop="28dp"
-        android:text="@string/set_default_launcher" />
-
-    <Button
-        android:id="@+id/buttonOpenPdf"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_marginTop="12dp"
-        android:text="@string/skip_default_launcher" />
+        android:indeterminate="true" />
 
 </LinearLayout>
